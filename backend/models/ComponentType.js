@@ -1,0 +1,8 @@
+const { Schema, model, Types } = require("mongoose")
+
+const schema = new Schema({
+	name: { type: String, required: true },
+	descr: { type: String },
+})
+
+module.exports = model("ComponentType", schema)
