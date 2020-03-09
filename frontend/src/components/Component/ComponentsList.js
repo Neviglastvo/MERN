@@ -10,8 +10,8 @@ export const ComponentList = () => {
 	const { token } = useContext(AuthContext)
 	const { request } = useHttp()
 
-	const [components, setComponents] = useState()
-	const [manufacturers, setManufacturers] = useState()
+	const [, setComponents] = useState()
+	const [, setManufacturers] = useState()
 
 	const fetchComponents = useCallback(async () => {
 		const result = await request(`/api/components`, "GET", null)
@@ -35,7 +35,7 @@ export const ComponentList = () => {
 		} catch (error) {
 			console.log("fetchManufacturers error", error)
 		}
-	}, [])
+	}, [request])
 
 	useEffect(() => {
 		fetchComponents()

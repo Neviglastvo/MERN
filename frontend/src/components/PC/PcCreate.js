@@ -1,7 +1,5 @@
 import { Button, makeStyles, Paper, TextField } from "@material-ui/core"
-import React, { useContext, useState } from "react"
-import { AuthContext } from "../../context/AuthContext"
-import { useHttp } from "../../hooks/http.hook"
+import React, { useState } from "react"
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -25,10 +23,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export const PcCreate = props => {
-	const { token } = useContext(AuthContext)
-	const { request } = useHttp()
-
-	// console.log("PcCreate ")
 	const classes = useStyles()
 
 	function getRandomInt(min, max) {

@@ -10,7 +10,7 @@ export const ManufacturerList = () => {
 	const { token } = useContext(AuthContext)
 	const { request } = useHttp()
 
-	const [manufacturers, setManufacturers] = useState()
+	const [, setManufacturers] = useState()
 
 	const fetchManufacturers = useCallback(async () => {
 		const fetched = await request(`/api/manufacturers`, "GET", null)

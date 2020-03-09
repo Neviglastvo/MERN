@@ -93,4 +93,18 @@ router.get("/", async (req, res) => {
 	}
 })
 
+router.get("/type/:type", async (req, res) => {
+	try {
+		console.log(req.params)
+		const items = await Component.find({ type: req.params.type })
+		console.log(items)
+		res.status(201).json({ items })
+	} catch (error) {
+		console.log(error)
+		res
+			.status(500)
+			.json({ message: `oof, components.routes.js (/) error: <br> ${error}` })
+	}
+})
+
 module.exports = router

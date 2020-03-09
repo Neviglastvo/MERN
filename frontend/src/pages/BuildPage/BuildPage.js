@@ -1,12 +1,15 @@
+import { TextField } from "@material-ui/core"
 import Button from "@material-ui/core/Button"
 import Grid from "@material-ui/core/Grid"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
-import PropTypes from "prop-types"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import Builder from "../../components/Builder/Builder"
+import { AuthContext } from "../../context/AuthContext"
+import { useAlert } from "../../hooks/alert.hook"
 import { useHttp } from "../../hooks/http.hook"
 import "./BuildPage.sass"
+import { checkPropTypes } from "prop-types"
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -19,42 +22,89 @@ const useStyles = makeStyles(theme => ({
 		marginTop: theme.spacing(1),
 		marginBottom: theme.spacing(1),
 	},
+	item: {
+		width: "100%",
+		height: "100%",
+		display: "flex",
+	},
 }))
 
-Builder.propTypes = {
-	onClose: PropTypes.func.isRequired,
-	open: PropTypes.bool.isRequired,
-	selectedValue: PropTypes.string.isRequired,
-}
+// Builder.propTypes = {
+// 	onClose: PropTypes.func.isRequired,
+// 	open: PropTypes.bool.isRequired,
+// 	selectedValue: PropTypes.string.isRequired,
+// }
 
 const BuildPage = () => {
 	const classes = useStyles()
-	const { request } = useHttp()
+	const message = useAlert()
 
+	const { request } = useHttp()
+	const { token } = useContext(AuthContext)
+
+	const [values, setValues] = useState({
+		name: Math.random()
+			.toString(36)
+			.substring(7),
+		descr: "qwe",
+		grade: getRandomInt(1, 12),
+	})
+
+	function getRandomInt(min, max) {
+		min = Math.ceil(min)
+		max = Math.floor(max)
+		return Math.floor(Math.random() * (max - min)) + min //Максимум не включается, минимум включается
+	}
+
+	const handleValueChange = prop => event => {
+		console.log("handleValueChange", event.target.value)
+		setValues({ ...values, [prop]: event.target.value })
+	}
+
+	// const handleClickOpen = () => {
+	// 	setOpen(true)
+	// }
+
+	// const handleClose = value => {
+	// 	console.log("open :", open)
+	// 	setOpen(false)
+	// 	console.log("open :", open)
+	// 	setSelectedValue(value)
+	// }
+	/////////////////////////////////////////////////////
 	const [open, setOpen] = useState(false)
 	const [selectedValue, setSelectedValue] = useState()
-
-	useEffect(() => {
-		console.log("useEffect selectedValue", selectedValue)
-	})
 
 	const handleClickOpen = () => {
 		setOpen(true)
 	}
 
-	const onClose = value => {
-		console.log("onClose value", value)
+	const handleClose = value => {
 		setOpen(false)
 		setSelectedValue(value)
-		console.log("selectedValue", selectedValue)
+	}
+	////////////////////////////////////////////
+	const createHandler = async values => {
+		console.log("values", values)
+		try {
+			await request(
+				"/api/pc/generate",
+				"POST",
+				{ ...values },
+				{ Authorization: `Bearer ${token}` },
+			)
+			message(`PC with name: ${values.name} saved`)
+			console.log("values", values)
+		} catch (error) {
+			console.error(error)
+		}
 	}
 
-	const fetch = useCallback(
-		async component => {
-			const data = await request(`/api/${component}`, "GET", null)
-		},
-		[request],
-	)
+	// Builder.propTypes = {
+	// 	onClose: checkPropTypes.func.isRequired,
+	// 	open: checkPropTypes.bool.isRequired,
+	// 	selectedValue: checkPropTypes.string.isRequired,
+	// }
 
 	return (
 		<Grid container spacing={2} className={classes.root}>
@@ -65,10 +115,36 @@ const BuildPage = () => {
 			<Grid item xs={12}>
 				<div className="builder">
 					<div className="builder__container">
-						<div className="builder__item builder__item--1">Name</div>
-						<div className="builder__item builder__item--2">Score</div>
-						<div className="builder__item builder__item--3">Price</div>
-						<div className="builder__item builder__item--4">Motherboard</div>
+						<div className="builder__item builder__item--1">
+							<TextField
+								id="name"
+								className={classes.item}
+								name="name"
+								label="Title"
+								value={values.name}
+								onChange={handleValueChange("name")}
+							/>
+						</div>
+						<div className="builder__item builder__item--2">
+							<TextField
+								id="grade"
+								className={classes.item}
+								name="grade"
+								label="Grade"
+								value={values.grade}
+								onChange={handleValueChange("grade")}
+							/>
+						</div>
+						<div className="builder__item builder__item--3">
+							<Button
+								variant="contained"
+								color="primary"
+								onClick={() => createHandler(values)}
+							>
+								Save
+							</Button>
+						</div>
+						<div className="builder__item builder__item--4">Empty</div>
 						<div className="builder__item builder__item--5">Empty</div>
 						<div className="builder__item builder__item--6">CPU</div>
 						<div className="builder__item builder__item--7">CPU Cooler</div>
@@ -84,15 +160,14 @@ const BuildPage = () => {
 						<div className="builder__item builder__item--12">
 							<Typography variant="subtitle1">Selected: {selectedValue}</Typography>
 							<br />
-							<Button variant="outlined" color="secondary" onClick={handleClickOpen}>
-								Select Motherboard
+							<Button variant="contained" color="secondary" onClick={handleClickOpen}>
+								Choose motherboard
 							</Button>
 							<Builder
-								selectedValue={""}
+								selectedValue={selectedValue}
 								open={open}
-								onClose={onClose}
-								componentName={"Motherboard"}
-								values={["username@gmail.com", "user02@gmail.com"]}
+								onClose={handleClose}
+								componentName={"motherboard"}
 								stepsName={["Step1", "Step2", "Step3"]}
 								stepsContent={["Step1 content", "Step2 content", "Step3 content"]}
 							/>

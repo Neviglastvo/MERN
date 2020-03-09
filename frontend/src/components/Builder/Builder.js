@@ -1,30 +1,50 @@
-import Avatar from "@material-ui/core/Avatar"
+import { Avatar } from "@material-ui/core"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
-import ListItemAvatar from "@material-ui/core/ListItemAvatar"
 import ListItemText from "@material-ui/core/ListItemText"
 import Step from "@material-ui/core/Step"
 import StepLabel from "@material-ui/core/StepLabel"
 import Stepper from "@material-ui/core/Stepper"
 import Typography from "@material-ui/core/Typography"
-import PersonIcon from "@material-ui/icons/Person"
 import React, { useState } from "react"
+import Async from "react-async"
+import { useHttp } from "../../hooks/http.hook"
 
 const Builder = props => {
-	const { onClose, open } = props
+	const { request } = useHttp()
+
+	const loadComponents = async component => {
+		// fetch(`/api/components/type/${component}`)
+
+		const data = await fetch(`/api/components/type/2`)
+			.then(res => (res.ok ? res : Promise.reject(res)))
+			.then(res => res.json())
+
+		console.log("data", data)
+		return data
+	}
+
+	const { onClose, selectedValue, open, setOpen } = props
 
 	const handleListItemClick = value => {
 		console.log("activeStep", activeStep)
 		console.log("value", value)
+
 		if (activeStep === props.stepsName.length - 1) {
+			console.log("activeStep === props.stepsName.length - 1", "yes")
+
 			onClose(value)
 			return
 		}
 
 		handleNext(value)
+	}
+
+	const handleClose = () => {
+		onClose(selectedValue)
 	}
 
 	function getStepContent(stepIndex) {
@@ -55,22 +75,53 @@ const Builder = props => {
 		setActiveStep(0)
 	}
 
+	const [values, setValues] = useState()
+
 	return (
-		<Dialog onClose={onClose} aria-labelledby={props.componentName} open={open}>
+		<Dialog
+			aria-labelledby={props.componentName}
+			open={open}
+			onClose={handleClose}
+		>
 			<DialogTitle id={props.componentName}>
 				Choose {props.componentName}
 			</DialogTitle>
 			<List>
-				{props.values.map(value => (
-					<ListItem button onClick={() => handleListItemClick(value)} key={value}>
-						<ListItemAvatar>
-							<Avatar>
-								<PersonIcon />
-							</Avatar>
-						</ListItemAvatar>
-						<ListItemText primary={value} />
-					</ListItem>
-				))}
+				{open && (
+					<Async promiseFn={loadComponents}>
+						<Async.Loading>Loading...</Async.Loading>
+						<Async.Fulfilled>
+							{data => {
+								return (
+									<>
+										{data.items.map(component => (
+											<ListItem
+												button
+												onClick={() => handleListItemClick(component._id)}
+												key={component._id}
+											>
+												<Avatar>{component.name.substring(0, 1)}</Avatar>
+												<ListItemText primary={component.name} />
+											</ListItem>
+										))}
+									</>
+								)
+							}}
+						</Async.Fulfilled>
+						<Async.Rejected>
+							{error => `Something went wrong: ${error.message}`}
+						</Async.Rejected>
+					</Async>
+				)}
+				{/* {open & (values !== undefined) ? (
+					values.map(value => (
+						<ListItem button onClick={() => handleListItemClick(value)} key={value}>
+							<ListItemText primary={value.name} />
+						</ListItem>
+					))
+				) : (
+					<div>Loading</div>
+				)} */}
 			</List>
 
 			<Typography>{getStepContent(activeStep)}</Typography>
