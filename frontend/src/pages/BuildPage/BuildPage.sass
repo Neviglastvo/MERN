@@ -4,6 +4,7 @@
   min-width: 100vh
   height: 100vh
   position: relative
+  margin: -16px
   margin-left: auto
 
   &__container
@@ -24,8 +25,16 @@
     justify-content: center
     position: relative
     color: #fff
+    padding: 10px
     border: 1px solid rgba(255, 255, 255, 0.75)
     // margin: -1px
+    &--subitems
+      padding: 0
+
+    &--active
+      border-color: rgba(20, 230, 20, 0.75)
+    &--disabled
+      border-color: rgb(83, 40, 40)
 
     &--1
       grid-area: 1 / 1 / 2 / 7

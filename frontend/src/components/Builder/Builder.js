@@ -14,29 +14,21 @@ import Async from "react-async"
 import { useHttp } from "../../hooks/http.hook"
 
 const Builder = props => {
-	const { request } = useHttp()
+	const { onClose, open, id, stepsName } = props
 
-	const loadComponents = async component => {
-		// fetch(`/api/components/type/${component}`)
+	console.log("builder open ", open)
 
-		const data = await fetch(`/api/components/type/2`)
+	const loadComponents = async () => {
+		const data = await fetch(`/api/components/type/${id}`)
 			.then(res => (res.ok ? res : Promise.reject(res)))
 			.then(res => res.json())
 
-		console.log("data", data)
 		return data
 	}
 
-	const { onClose, selectedValue, open, setOpen } = props
-
 	const handleListItemClick = value => {
-		console.log("activeStep", activeStep)
-		console.log("value", value)
-
-		if (activeStep === props.stepsName.length - 1) {
-			console.log("activeStep === props.stepsName.length - 1", "yes")
-
-			onClose(value)
+		if (activeStep === stepsName.length - 1) {
+			onClose(value, id)
 			return
 		}
 
@@ -44,7 +36,7 @@ const Builder = props => {
 	}
 
 	const handleClose = () => {
-		onClose(selectedValue)
+		onClose("", id)
 	}
 
 	function getStepContent(stepIndex) {
@@ -52,7 +44,7 @@ const Builder = props => {
 			case 0:
 				return "Select campaign settings...."
 			case 1:
-				return "What is an ad group anyways?"
+				return "What is an ad `1group anyways?"
 			case 2:
 				return "This is the bit I really care about!"
 			default:
@@ -61,7 +53,7 @@ const Builder = props => {
 	}
 
 	const [activeStep, setActiveStep] = useState(0)
-	const steps = props.stepsName
+	const steps = stepsName
 
 	const handleNext = () => {
 		setActiveStep(prevActiveStep => prevActiveStep + 1)
@@ -74,54 +66,40 @@ const Builder = props => {
 	const handleReset = () => {
 		setActiveStep(0)
 	}
-
-	const [values, setValues] = useState()
+	console.log("builder open ", open)
 
 	return (
-		<Dialog
-			aria-labelledby={props.componentName}
-			open={open}
-			onClose={handleClose}
-		>
-			<DialogTitle id={props.componentName}>
-				Choose {props.componentName}
-			</DialogTitle>
+		<Dialog id={id} aria-labelledby={id} open={open} onClose={handleClose}>
+			<DialogTitle>Choose {id}</DialogTitle>
 			<List>
-				{open && (
-					<Async promiseFn={loadComponents}>
-						<Async.Loading>Loading...</Async.Loading>
-						<Async.Fulfilled>
-							{data => {
-								return (
-									<>
-										{data.items.map(component => (
-											<ListItem
-												button
-												onClick={() => handleListItemClick(component._id)}
-												key={component._id}
-											>
-												<Avatar>{component.name.substring(0, 1)}</Avatar>
-												<ListItemText primary={component.name} />
-											</ListItem>
-										))}
-									</>
-								)
-							}}
-						</Async.Fulfilled>
-						<Async.Rejected>
-							{error => `Something went wrong: ${error.message}`}
-						</Async.Rejected>
-					</Async>
-				)}
-				{/* {open & (values !== undefined) ? (
-					values.map(value => (
-						<ListItem button onClick={() => handleListItemClick(value)} key={value}>
-							<ListItemText primary={value.name} />
-						</ListItem>
-					))
-				) : (
-					<div>Loading</div>
-				)} */}
+				{console.log("builder open ", open)}
+
+				<Async promiseFn={loadComponents}>
+					<Async.Loading>Loading...</Async.Loading>
+					<Async.Fulfilled>
+						{data => {
+							console.log("data", data)
+
+							return (
+								<>
+									{data.items.map(component => (
+										<ListItem
+											button
+											onClick={() => handleListItemClick(component.name)}
+											key={component.name}
+										>
+											<Avatar>{component.name.substring(0, 1)}</Avatar>
+											<ListItemText primary={component.name} />
+										</ListItem>
+									))}
+								</>
+							)
+						}}
+					</Async.Fulfilled>
+					<Async.Rejected>
+						{error => `Something went wrong: ${error.message}`}
+					</Async.Rejected>
+				</Async>
 			</List>
 
 			<Typography>{getStepContent(activeStep)}</Typography>
