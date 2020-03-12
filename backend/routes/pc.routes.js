@@ -7,7 +7,8 @@ const colors = require("colors")
 
 router.post("/generate", auth, async (req, res) => {
 	try {
-		const { name, descr, date, grade, cpu } = req.body
+		console.log("pc req.body".cyan, req.body)
+		const { name, descr, date, grade, motherboard, cpu, ram, gpu, psu } = req.body
 
 		console.log("pc cpu".cyan, cpu)
 
@@ -31,7 +32,7 @@ router.post("/generate", auth, async (req, res) => {
 			date,
 			ownerID,
 			ownerName,
-			components: { componentType: cpu },
+			components: { motherboard, cpu, ram, gpu, psu },
 		})
 
 		console.log("pc".cyan, pc)

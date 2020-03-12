@@ -59,6 +59,7 @@ export const PcList = props => {
 	return (
 		<>
 			{props.pcs.map(pc => {
+				console.log("pc :", pc)
 				return (
 					<Grid item sm={12} md={6} lg={4} key={pc._id}>
 						<Card className={`${classes.itemRoot} grade grade--${pc.grade}`}>

@@ -25,14 +25,23 @@
     justify-content: center
     position: relative
     color: #fff
-    padding: 10px
+    padding: 0 10px
+    opacity: 0.5
     border: 1px solid rgba(255, 255, 255, 0.75)
+    font-family: Roboto
     // margin: -1px
     &--subitems
       padding: 0
 
     &--active
-      border-color: rgba(20, 230, 20, 0.75)
+      background-color: rgba(255, 255, 255, 0.75)
+      color: #000
+      opacity: 1
+      transition: box-shadow 300ms
+      &:hover
+        z-index: 2
+        box-shadow: 0 0 10px 0px rgba(20, 230, 20, 0.75)
+
     &--disabled
       border-color: rgb(83, 40, 40)
 
@@ -42,6 +51,7 @@
       grid-area: 1 / 7 / 2 / 9
     &--3
       grid-area: 1 / 9 / 2 / 11
+      background-color: transparent
     &--4
       grid-area: 2 / 1 / 4 / 3
     &--5
@@ -76,6 +86,11 @@
       grid-area: 10 / 7 / 12 / 9
     &--20
       grid-area: 10 / 9 / 12 / 11
+
+  &__item-title
+    pointer-events: none
+
+
 
   &__subitem
     display: flex

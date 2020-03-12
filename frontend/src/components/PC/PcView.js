@@ -30,8 +30,9 @@ const useStyles = makeStyles(theme => ({
 		maxWidth: "100%",
 	},
 	media: {
-		height: 0,
-		paddingTop: "56.25%", // 16:9
+		height: "200px",
+		// height: 0,
+		// paddingTop: "56.25%",
 		backgroundSize: "contain",
 		borderBottom: "1px solid #ccc",
 	},
@@ -41,6 +42,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export const PcCard = ({ pc }) => {
+	console.log("pc :", pc)
 	const classes = useStyles()
 	return (
 		<Grid item xs={12}>
@@ -62,9 +64,10 @@ export const PcCard = ({ pc }) => {
 				/>
 				<CardContent>
 					<Typography variant="body2" color="textSecondary" component="p">
-						This impressive paella is a perfect party dish and a fun meal to cook
-						together with your guests. Add 1 cup of frozen peas along with the
-						mussels, if you like.
+						Grade: {pc.grade}
+					</Typography>
+					<Typography variant="body2" color="textSecondary" component="p">
+						{pc.descr}
 					</Typography>
 				</CardContent>
 				<CardActions disableSpacing>

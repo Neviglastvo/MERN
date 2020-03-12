@@ -5,7 +5,10 @@ import IconButton from "@material-ui/core/IconButton"
 import { makeStyles } from "@material-ui/core/styles"
 import BuildIcon from "@material-ui/icons/Build"
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft"
+import ComputerIcon from "@material-ui/icons/Computer"
+import ExtensionIcon from "@material-ui/icons/Extension"
 import HomeIcon from "@material-ui/icons/Home"
+import ListAltIcon from "@material-ui/icons/ListAlt"
 import PersonIcon from "@material-ui/icons/Person"
 import SettingsIcon from "@material-ui/icons/Settings"
 import clsx from "clsx"
@@ -112,12 +115,30 @@ export default function Layout({ children }) {
 			label: "Admin",
 			Icon: SettingsIcon,
 			items: [
-				{ name: "pc", label: "Pc", href: "/admin/pc" },
-				{ name: "catalog", label: "Catalog", href: "/admin/catalog" },
+				{ name: "pc", label: "Pc", href: "/admin/pc", Icon: ComputerIcon },
+				{
+					name: "catalog",
+					label: "Catalog",
+					href: "/admin/catalog",
+					Icon: ListAltIcon,
+					items: [
+						{
+							name: "pc",
+							label: "Motherboards",
+							href: "/admin/catalog/motherboards",
+							Icon: ExtensionIcon,
+						},
+						{
+							name: "catalog",
+							label: "Videocards",
+							href: "/admin/catalog/videocards",
+							Icon: ExtensionIcon,
+						},
+					],
+				},
 			],
 		},
 	]
-
 	const classes = useStyles()
 	const [open, setOpen] = React.useState(true)
 	const handleDrawerToggle = () => {

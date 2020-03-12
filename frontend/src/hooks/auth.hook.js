@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react"
-
+import React, { useCallback, useEffect, useState } from "react"
+import { Redirect } from "react-router-dom"
 const storageName = "userData"
 
 export const useAuth = () => {
@@ -28,6 +28,11 @@ export const useAuth = () => {
 
 	useEffect(() => {
 		const data = JSON.parse(localStorage.getItem(storageName))
+		console.log("data :", data)
+		if (!data.token) {
+			logout()
+			return <Redirect to="/" />
+		}
 
 		if (data && data.token) {
 			login(data.token, data.userId, data.userName)

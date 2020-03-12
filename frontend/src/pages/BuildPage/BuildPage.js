@@ -1,15 +1,12 @@
 import { TextField } from "@material-ui/core"
 import Button from "@material-ui/core/Button"
-import Grid from "@material-ui/core/Grid"
 import { makeStyles } from "@material-ui/core/styles"
-import Typography from "@material-ui/core/Typography"
-import React, { useContext, useState, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import Builder from "../../components/Builder/Builder"
 import { AuthContext } from "../../context/AuthContext"
 import { useAlert } from "../../hooks/alert.hook"
 import { useHttp } from "../../hooks/http.hook"
 import "./BuildPage.sass"
-import { checkPropTypes } from "prop-types"
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -25,6 +22,21 @@ const useStyles = makeStyles(theme => ({
 	item: {
 		width: "100%",
 		display: "flex",
+	},
+	itemHidden: {
+		display: "block",
+		position: "absolute",
+		width: "100%",
+		height: "100%",
+		top: 0,
+		left: 0,
+		opacity: 0,
+		"& input": {
+			cursor: "pointer",
+		},
+		"&:hover": {
+			cursor: "pointer",
+		},
 	},
 }))
 
@@ -54,7 +66,7 @@ const BuildPage = () => {
 	function getRandomInt(min, max) {
 		min = Math.ceil(min)
 		max = Math.floor(max)
-		return Math.floor(Math.random() * (max - min)) + min //Максимум не включается, минимум включается
+		return Math.floor(Math.random() * (max - min)) + min
 	}
 
 	// Builder.propTypes = {
@@ -68,77 +80,65 @@ const BuildPage = () => {
 			.substring(7),
 		descr: "qwe",
 		grade: getRandomInt(1, 12),
-		motherboard: "motherboard",
-		cpu: "cpu",
+		motherboard: "",
+		cpu: "",
+		ram: "",
+		gpu: "",
+		psu: "",
 	})
 
 	const handleValueChange = prop => event => {
 		setValues({ ...values, [prop]: event.target.value })
 	}
 
-	/////////////////////////////////////////////////////
-	const [open, setOpen] = useState({ motherboard: false, cpu: false })
+	const [open, setOpen] = useState(false)
 	const [component, setComponent] = useState({
 		id: "cpu",
-		open: { motherboard: false, cpu: false },
-		// selectedValue: null,
 	})
 
-	const handleClickOpen = (componentName, componentValues, popupOpen) => {
-		console.log("componentName :", componentName)
-		console.log("componentValues :", componentValues)
-		console.log("popupOpen :", popupOpen)
+	const handleClickOpen = componentName => {
 		setComponent({
 			id: componentName,
-			open: { [componentName]: true },
 		})
-		setOpen({ [componentName]: true })
+		setOpen(true)
 	}
 
-	const onClose = (value, prop) => {
-		setOpen({ [prop]: false })
-		setValues({ ...values, [prop]: value })
+	const onClose = (value, componentName) => {
+		setOpen(false)
+		setValues({ ...values, [componentName]: value })
 	}
 
 	useEffect(() => {
-		console.log("open :", open)
-		console.log("component :", component)
-		console.log("open[component.id] :", open[component.id])
+		console.log("useEffect open :", open)
+		console.log("useEffect component :", component)
 	}, [open, component])
-	////////////////////////////////////////////
 
 	return (
 		<div className="builder">
-			<Builder
-				id={component.id}
-				stepsName={["Step1", "Step2", "Step3"]}
-				stepsContent={["Step1 content", "Step2 content", "Step3 content"]}
-				open={open[component.id]}
-				onClose={onClose}
-			/>
+			<Builder id={component.id} open={open} onClose={onClose} />
 
 			<div className="builder__container">
-				<div className="builder__item builder__item--1">
+				<div className="builder__item builder__item--1 builder__item--active">
 					<TextField
 						id="name"
 						className={classes.item}
 						name="name"
-						label="Title"
+						label="TITLE"
 						value={values.name}
 						onChange={handleValueChange("name")}
 					/>
 				</div>
-				<div className="builder__item builder__item--2">
+				<div className="builder__item builder__item--2 builder__item--active">
 					<TextField
 						id="grade"
 						className={classes.item}
 						name="grade"
-						label="Grade"
+						label="GRADE"
 						value={values.grade}
 						onChange={handleValueChange("grade")}
 					/>
 				</div>
-				<div className="builder__item builder__item--3">
+				<div className="builder__item builder__item--3 builder__item--active">
 					<Button
 						variant="contained"
 						color="primary"
@@ -151,7 +151,22 @@ const BuildPage = () => {
 				<div className="builder__item builder__item--5">Empty</div>
 				<div className="builder__item builder__item--6">CPU</div>
 				<div className="builder__item builder__item--7">CPU Cooler</div>
-				<div className="builder__item builder__item--8">RAM</div>
+				<div className="builder__item builder__item--8 builder__item--active">
+					<div className="builder__item-title">
+						{values.ram.name ? values.ram.name : "RAM"}
+					</div>
+					<TextField
+						id="ram"
+						className={(classes.item, classes.itemHidden)}
+						name="ram"
+						label="RAM"
+						value={values.ram}
+						onChange={handleValueChange("ram")}
+						onClick={() => {
+							handleClickOpen("ram")
+						}}
+					/>
+				</div>
 				<div className="builder__item builder__item--9">Empty</div>
 				<div className="builder__item builder__item--subitems builder__item--10">
 					<div className="builder__subitem">SSD</div>
@@ -159,43 +174,71 @@ const BuildPage = () => {
 					<div className="builder__subitem">Empty</div>
 					<div className="builder__subitem">Empty</div>
 				</div>
-				<div className="builder__item builder__item--11">VGA</div>
-				<div className="builder__item builder__item--12">
+				<div className="builder__item builder__item--11 builder__item--active">
+					<div className="builder__item-title">
+						{values.gpu.name ? values.gpu.name : "GPU"}
+					</div>
+					<TextField
+						id="gpu"
+						className={(classes.item, classes.itemHidden)}
+						name="gpu"
+						label="GPU"
+						value={values.gpu}
+						onChange={handleValueChange("gpu")}
+						onClick={() => {
+							handleClickOpen("gpu")
+						}}
+					/>
+				</div>
+				<div className="builder__item builder__item--12 builder__item--active">
+					<div className="builder__item-title">
+						{values.motherboard.name ? values.motherboard.name : "MOTHERBOARD"}
+					</div>
 					<TextField
 						id="motherboard"
-						className={classes.item}
+						className={(classes.item, classes.itemHidden)}
 						name="motherboard"
-						label="Motherboard"
+						label="MOTHERBOARD"
 						value={values.motherboard}
 						onChange={handleValueChange("motherboard")}
 						onClick={() => {
-							handleClickOpen("motherboard", values.motherboard, open.motherboard)
+							handleClickOpen("motherboard")
 						}}
 					/>
 				</div>
 				<div className="builder__item builder__item--13">Empty</div>
-				<div className="builder__item builder__item--14">PSU</div>
+				<div className="builder__item builder__item--14 builder__item--active">
+					<div className="builder__item-title">
+						{values.psu.name ? values.psu.name : "PSU"}
+					</div>
+					<TextField
+						id="psu"
+						className={(classes.item, classes.itemHidden)}
+						name="psu"
+						label="PSU"
+						value={values.psu}
+						onChange={handleValueChange("psu")}
+						onClick={() => {
+							handleClickOpen("psu")
+						}}
+					/>
+				</div>
 				<div className="builder__item builder__item--15">Empty</div>
-				<div className="builder__item builder__item--16">
+				<div className="builder__item builder__item--16 builder__item--active">
+					<div className="builder__item-title">
+						{values.cpu.name ? values.cpu.name : "CPU"}
+					</div>
 					<TextField
 						id="cpu"
-						className={classes.item}
+						className={(classes.item, classes.itemHidden)}
 						name="cpu"
 						label="CPU"
 						value={values.cpu}
 						onChange={handleValueChange("cpu")}
 						onClick={() => {
-							handleClickOpen("motherboard", values.cpu, open.cpu)
+							handleClickOpen("cpu")
 						}}
 					/>
-					{/* <Builder
-						id="cpu"
-						stepsName={["Step1", "Step2", "Step3"]}
-						stepsContent={["Step1 content", "Step2 content", "Step3 content"]}
-						selectedValue={values.cpu}
-						open={open.cpu}
-						onClose={onClose}
-					/> */}
 				</div>
 				<div className="builder__item builder__item--17">PCI-E</div>
 				<div className="builder__item builder__item--18">PCI-E</div>

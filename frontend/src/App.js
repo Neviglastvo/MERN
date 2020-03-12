@@ -5,6 +5,8 @@ import { AuthContext } from "./context/AuthContext"
 import { useAuth } from "./hooks/auth.hook"
 import AdminCatalogPage from "./pages/Admin/AdminCatalogPage"
 import AdminPcPage from "./pages/Admin/AdminPcPage"
+import AdminMotherboardsPage from "./pages/Admin/Catalog/AdminMotherboardsPage"
+import AdminVideocardsPage from "./pages/Admin/Catalog/AdminVideocardsPage"
 import BuildPage from "./pages/BuildPage/BuildPage"
 import HomePage from "./pages/HomePage"
 import NewsPage from "./pages/NewsPage"
@@ -42,7 +44,17 @@ function App() {
 						<AppRoute path="/build" component={BuildPage} />
 						<AppRoute path="/profile" component={UserPage} />
 						<AppRoute path="/admin/pc" component={AdminPcPage} />
-						<AppRoute path="/admin/catalog" component={AdminCatalogPage} />
+						<AppRoute path="/admin/catalog" exact component={AdminCatalogPage} />
+						<AppRoute
+							path="/admin/catalog/motherboards"
+							exact
+							component={AdminMotherboardsPage}
+						/>
+						<AppRoute
+							path="/admin/catalog/videocards"
+							exact
+							component={AdminVideocardsPage}
+						/>
 						<AppRoute path="/:name/:name" exact component={PcDetailPage} />
 						<Redirect to="/profile" />
 					</Switch>
