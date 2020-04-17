@@ -10,7 +10,8 @@
 		"client:install": "npm install --prefix frontend",
 		"client:build": "npm run build --prefix frontend",
 		"start": "concurrently \"npm run server\" \"npm run client\"",
-		"start2": "cross-env NODE_ENV=development concurrently \"npm run server\" \"npm run client\""
+		"start2": "cross-env NODE_ENV=development concurrently \"npm run server\" \"npm run client\"",
+		"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run start2"
 	},
 	"author": "nevejestvo",
 	"license": "ISC",
