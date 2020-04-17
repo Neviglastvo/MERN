@@ -18,7 +18,11 @@
 		"react-app-rewired": "^2.1.5",
 		"react-async": "^10.0.0",
 		"react-dom": "^16.12.0",
+		"react-redux": "^7.2.0",
 		"react-scripts": "3.3.1",
+		"redux": "^4.0.5",
+		"redux-devtools-extension": "^2.13.8",
+		"redux-thunk": "^2.3.0",
 		"reset-css": "^5.0.1",
 		"typeface-roboto": "0.0.75"
 	},
@@ -28,7 +32,7 @@
 		"test": "react-scripts test",
 		"eject": "react-scripts eject"
 	},
-	"proxy": "http://localhost:5000/",
+	"proxy": "http://localhost:9000/",
 	"eslintConfig": {
 		"extends": "react-app",
 		"settings": {

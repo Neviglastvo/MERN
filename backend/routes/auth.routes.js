@@ -57,9 +57,7 @@ router.post(
 router.post(
 	"/login",
 	[
-		check("email", "Invalid Email has entered")
-			.normalizeEmail()
-			.isEmail(),
+		check("email", "Invalid Email has entered").normalizeEmail().isEmail(),
 		check("password", "Invalid Password. Try better").exists(),
 	],
 	async (req, res) => {
@@ -88,7 +86,7 @@ router.post(
 			}
 
 			const token = jwt.sign({ userID: user.id }, config.get("jwtSecret"), {
-				expiresIn: "12h",
+				expiresIn: "999999h",
 			})
 
 			// const userName = await User.findOne({ email, userName: req.user.name })

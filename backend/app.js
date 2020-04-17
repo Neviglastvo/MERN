@@ -10,6 +10,13 @@ app.use("/api/pc", require("./routes/pc.routes"))
 app.use("/api/components", require("./routes/components.routes"))
 app.use("/api/manufacturers", require("./routes/manufacturers.routes"))
 
+if (process.env.NODE_ENV === "production") {
+	app.use("/", express.static(path.join(__dirname, "frontend", "build")))
+
+	app.get("*", (req, res) => {
+		res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
+	})
+}
 const PORT = config.get("port") || 3000
 
 async function start() {

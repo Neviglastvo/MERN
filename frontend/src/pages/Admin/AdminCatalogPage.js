@@ -1,6 +1,6 @@
 import React from "react"
-import { ComponentList } from "../../components/Component/ComponentsList"
-import { ManufacturerList } from "../../components/Manufacturer/ManufacturerList"
+import { ComponentList } from "components/Component/ComponentsList"
+import { ManufacturerList } from "components/Manufacturer/ManufacturerList"
 
 const AdminCatalogPage = () => {
 	return (

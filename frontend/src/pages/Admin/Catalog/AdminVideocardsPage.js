@@ -1,5 +1,5 @@
 import React from "react"
-import VideocardsList from "../../../components/Component/VideocardsList/VideocardsList"
+import VideocardsList from "components/Component/VideocardsList/VideocardsList"
 
 const AdminVideocardsPage = () => {
 	return <VideocardsList />

@@ -1,13 +1,13 @@
 import Grid from "@material-ui/core/Grid"
 import { makeStyles } from "@material-ui/core/styles"
 import React, { useCallback, useContext, useEffect, useState } from "react"
-import { PcCreate } from "../../components/PC/PcCreate"
-import { PcList } from "../../components/PC/PcList/PcList"
-import { AuthContext } from "../../context/AuthContext"
-import { useAlert } from "../../hooks/alert.hook"
-import { useHttp } from "../../hooks/http.hook"
+import { PcCreate } from "components/PC/PcCreate"
+import { PcList } from "components/PC/PcList/PcList"
+import { AuthContext } from "context/AuthContext"
+import { useAlert } from "hooks/alert.hook"
+import { useHttp } from "hooks/http.hook"
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
 	},
@@ -32,7 +32,7 @@ const AdminPcPage = () => {
 
 	const [pcs, setPcs] = useState(fetchPcs)
 
-	const deleteHandler = async id => {
+	const deleteHandler = async (id) => {
 		try {
 			await request(`/api/pc/delete/${id}`, "GET", null, {
 				Authorization: `Bearer ${token}`,
@@ -45,7 +45,7 @@ const AdminPcPage = () => {
 		}
 	}
 
-	const createHandler = async values => {
+	const createHandler = async (values) => {
 		console.log("values", values)
 		try {
 			await request(

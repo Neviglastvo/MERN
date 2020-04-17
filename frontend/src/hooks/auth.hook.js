@@ -29,17 +29,13 @@ export const useAuth = () => {
 	useEffect(() => {
 		const data = JSON.parse(localStorage.getItem(storageName))
 		console.log("data :", data)
-		if (!data.token) {
-			logout()
-			return <Redirect to="/" />
-		}
 
 		if (data && data.token) {
 			login(data.token, data.userId, data.userName)
 		}
 
 		setReady(true)
-	}, [login])
+	}, [login, logout])
 
 	return { login, logout, token, ready, userId, userName }
 }

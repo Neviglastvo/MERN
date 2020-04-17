@@ -2,12 +2,15 @@
 	"name": "pchelper",
 	"version": "1.0.0",
 	"description": "",
-	"main": "app.js",
+	"main": "backend/app.js",
 	"scripts": {
-		"start": "node backend/app.js",
+		"dev": "node backend/app.js",
 		"server": "nodemon backend/app.js",
 		"client": "npm run start --prefix frontend",
-		"dev": "concurrently \"npm run server\" \"npm run client\""
+		"client:install": "npm install --prefix frontend",
+		"client:build": "npm run build --prefix frontend",
+		"start2": "concurrently \"npm run server\" \"npm run client\"",
+		"start": "cross-env NODE_ENV=development concurrently \"npm run server\" \"npm run client\""
 	},
 	"author": "nevejestvo",
 	"license": "ISC",
@@ -16,6 +19,7 @@
 		"colors": "^1.4.0",
 		"concurrently": "^5.1.0",
 		"config": "^3.2.5",
+		"cross-env": "^7.0.2",
 		"express": "^4.17.1",
 		"express-validator": "^6.4.0",
 		"jsonwebtoken": "^8.5.1",
@@ -23,5 +27,8 @@
 		"mongoose-auto-increment": "^5.0.1",
 		"node-sass": "^4.13.1",
 		"nodemon": "^2.0.2"
+	},
+	"engines": {
+		"node": "12.11"
 	}
 }

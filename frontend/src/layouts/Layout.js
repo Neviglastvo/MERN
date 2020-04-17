@@ -13,13 +13,13 @@ import PersonIcon from "@material-ui/icons/Person"
 import SettingsIcon from "@material-ui/icons/Settings"
 import clsx from "clsx"
 import React, { useContext } from "react"
-import Logo from "../components/Logo/Logo"
-import Nav from "../components/Nav/Nav"
-import { User } from "../components/User/User"
-import { AuthContext } from "../context/AuthContext"
+import Logo from "components/Logo/Logo"
+import Nav from "components/Nav/Nav"
+import User from "components/User/User"
+import { AuthContext } from "context/AuthContext"
 
 const drawerWidth = 240
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
 	root: {
 		display: "flex",
 		background: "linear-gradient(45deg, #2A5470 30%, #4C4177 90%)",
@@ -76,8 +76,10 @@ const useStyles = makeStyles(theme => ({
 		},
 	},
 	content: {
+		position: "relative",
 		flexGrow: 1,
-		height: "100vh",
+		height: "auto",
+		minHeight: "100vh",
 		overflow: "auto",
 	},
 	container: {
@@ -99,7 +101,7 @@ export default function Layout({ children }) {
 	const auth = useContext(AuthContext)
 	const isAuth = auth.isAuth
 
-	const items = [
+	const itemsAuthNot = [
 		{ href: "/", label: "Home", Icon: HomeIcon, exact: true },
 		// { href: "/news", label: "News", Icon: DescriptionIcon },
 	]
@@ -158,7 +160,7 @@ export default function Layout({ children }) {
 				open={open}
 			>
 				<Divider />
-				<Nav items={isAuth ? itemsAuth : items} />
+				<Nav items={isAuth ? itemsAuth : itemsAuthNot} />
 				<Divider />
 				<User />
 				<Divider />

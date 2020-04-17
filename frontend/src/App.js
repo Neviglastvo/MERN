@@ -1,21 +1,22 @@
+import { Loader } from "components/Loader/Loader"
+import { AuthContext } from "context/AuthContext"
+import { useAuth } from "hooks/auth.hook"
+import AdminCatalogPage from "pages/Admin/AdminCatalogPage"
+import AdminPcPage from "pages/Admin/AdminPcPage"
+import AdminMotherboardsPage from "pages/Admin/Catalog/AdminMotherboardsPage"
+import AdminVideocardsPage from "pages/Admin/Catalog/AdminVideocardsPage"
+import BuildPage from "pages/BuildPage/BuildPage"
+import HomePage from "pages/HomePage"
+import NewsPage from "pages/NewsPage"
+import PcDetailPage from "pages/PcDetailPage"
+import UserPage from "pages/ProfilePage"
 import React from "react"
 import { BrowserRouter, Redirect, Switch } from "react-router-dom"
-import { Loader } from "./components/Loader/Loader"
-import { AuthContext } from "./context/AuthContext"
-import { useAuth } from "./hooks/auth.hook"
-import AdminCatalogPage from "./pages/Admin/AdminCatalogPage"
-import AdminPcPage from "./pages/Admin/AdminPcPage"
-import AdminMotherboardsPage from "./pages/Admin/Catalog/AdminMotherboardsPage"
-import AdminVideocardsPage from "./pages/Admin/Catalog/AdminVideocardsPage"
-import BuildPage from "./pages/BuildPage/BuildPage"
-import HomePage from "./pages/HomePage"
-import NewsPage from "./pages/NewsPage"
-import PcDetailPage from "./pages/PcDetailPage"
-import UserPage from "./pages/ProfilePage"
-import { AppRoute } from "./routes"
+import { AppRoute } from "routes"
 
 function App() {
 	const { token, login, logout, userId, ready, userName } = useAuth()
+
 	const isAuth = !!token
 
 	if (!ready) {

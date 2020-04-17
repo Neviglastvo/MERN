@@ -10,19 +10,29 @@ const VideocardsList = () => {
 	const { token } = useContext(AuthContext)
 	const { request } = useHttp()
 
-	const [, setComponents] = useState()
+	const [videocards, setVideocards] = useState([])
+	const [manufacturers, setManufacturers] = useState({})
 
-	const fetchComponents = useCallback(async () => {
-		const result = await request(`/api/components/type/gpu`, "GET", null)
-		setComponents(result)
-		return result
+	const fetchVideocards = useCallback(async () => {
+		const req = await request(`/api/components/type/gpu`, "GET", null)
+		setVideocards(req.items)
+	}, [request])
+
+	const fetchManufacturers = useCallback(async () => {
+		const req = await request(`/api/manufacturers`, "GET", null)
+		const result = req.reduce(
+			(obj, item) => ((obj[item["_id"]] = item["name"]), obj),
+			{},
+		)
+		setManufacturers(result)
 	}, [request])
 
 	useEffect(() => {
-		fetchComponents()
-	}, [fetchComponents])
+		fetchVideocards()
+		fetchManufacturers()
+	}, [fetchVideocards])
 
-	const createHandler = async values => {
+	const createHandler = async (values) => {
 		console.log("values", values)
 		try {
 			await request(
@@ -31,7 +41,7 @@ const VideocardsList = () => {
 				{ ...values },
 				{ Authorization: `Bearer ${token}` },
 			)
-			fetchComponents()
+			fetchVideocards()
 			message(`Component with name: ${values.name} saved`)
 		} catch (error) {
 			console.error(error)
@@ -39,7 +49,7 @@ const VideocardsList = () => {
 		}
 	}
 
-	const updateHandler = async values => {
+	const updateHandler = async (values) => {
 		try {
 			await request(
 				"/api/components/update",
@@ -49,7 +59,7 @@ const VideocardsList = () => {
 					Authorization: `Bearer ${token}`,
 				},
 			)
-			fetchComponents()
+			fetchVideocards()
 			message(`Component with name: ${values.name} saved`)
 		} catch (error) {
 			console.error(error)
@@ -57,12 +67,12 @@ const VideocardsList = () => {
 		}
 	}
 
-	const deleteHandler = async id => {
+	const deleteHandler = async (id) => {
 		try {
 			await request(`/api/components/delete/${id}`, "GET", null, {
 				Authorization: `Bearer ${token}`,
 			})
-			fetchComponents()
+			fetchVideocards()
 			message(`Component with id:${id} deleted`)
 		} catch (error) {
 			console.log(error)
@@ -94,62 +104,41 @@ const VideocardsList = () => {
 				{
 					title: "Type",
 					field: "type",
-					lookup: {
-						motherboard: "Motherboard",
-						cpu: "CPU",
-						gpu: "GPU",
-						ram: "RAM",
-						psu: "PSU",
-						hdd: "HDD",
-						case: "Case",
-					},
+					editable: "never",
+					initialEditValue: "GPU",
 				},
 				{
 					title: "Manufacturer",
 					field: "manufacturer",
-					lookup: {
-						"5e5fb66780853fb8497416a8": "AMD",
-						"5e5fb944823650d0bd1b271a": "INTEL",
-						"5e640376f000fc6e5cccf6df": "NVIDIA",
-						"5e6406580b9653805804731a": "ASUS",
-						"5e6406750b9653805804731b": "AEROCOOL",
-						"5e640702b011368b8021a2ea": "KINGSTON",
-					},
+					lookup: manufacturers,
+					// lookup: {
+					// 	"5e5fb66780853fb8497416a8": "AMD",
+					// 	"5e5fb944823650d0bd1b271a": "INTEL",
+					// 	"5e640376f000fc6e5cccf6df": "NVIDIA",
+					// 	"5e6406580b9653805804731a": "ASUS",
+					// 	"5e6406750b9653805804731b": "AEROCOOL",
+					// 	"5e640702b011368b8021a2ea": "KINGSTON",
+					// },
 				},
 			]}
-			data={() =>
-				new Promise(async (resolve, reject) => {
-					// prepare your data and then call resolve like this:
-					const fetched = await request(`/api/components/type/gpu`, "GET", null)
-					console.log("fetched", fetched)
-					setComponents(fetched)
-					resolve({
-						data: fetched.items, // your data array
-						page: 0, // current page number
-						totalCount: fetched.items.length, // total row number
-					})
-					reject(e => {
-						console.log("error", e)
-					})
-				})
-			}
+			data={videocards}
 			options={{
 				filtering: true,
 				actionsColumnIndex: -1,
 			}}
 			editable={{
-				onRowAdd: newData =>
-					new Promise(resolve => {
+				onRowAdd: (newData) =>
+					new Promise((resolve) => {
 						resolve()
 						createHandler(newData)
 					}),
 				onRowUpdate: (newData, oldData) =>
-					new Promise(resolve => {
+					new Promise((resolve) => {
 						resolve()
 						updateHandler(newData)
 					}),
-				onRowDelete: oldData =>
-					new Promise(resolve => {
+				onRowDelete: (oldData) =>
+					new Promise((resolve) => {
 						resolve()
 						deleteHandler(oldData._id)
 					}),

@@ -1,17 +1,29 @@
+import "assets/sass/app.sass"
 import "material-icons/iconfont/material-icons.scss"
 import "materialize-css"
 // import "materialize-css/sass/materialize.scss"
 import React from "react"
 import ReactDOM from "react-dom"
+import { Provider } from "react-redux"
+import { applyMiddleware, createStore } from "redux"
+import { composeWithDevTools } from "redux-devtools-extension"
+import thunk from "redux-thunk"
+import { rootReducer } from "redux/rootReducer"
 import "reset-css"
 import "typeface-roboto"
-import App from "./App"
-import "./sass/app.sass"
-import * as serviceWorker from "./serviceWorker"
+import App from "App"
 
-ReactDOM.render(<App />, document.getElementById("root"))
+const store = createStore(
+	rootReducer,
+	composeWithDevTools(
+		applyMiddleware(thunk),
+		// other store enhancers if any
+	),
+)
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.register()
+ReactDOM.render(
+	<Provider store={store}>
+		<App />
+	</Provider>,
+	document.getElementById("root"),
+)

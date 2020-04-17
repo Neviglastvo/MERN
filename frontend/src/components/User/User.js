@@ -15,11 +15,11 @@ import Visibility from "@material-ui/icons/Visibility"
 import VisibilityOff from "@material-ui/icons/VisibilityOff"
 import clsx from "clsx"
 import React, { useContext, useEffect, useState } from "react"
-import { AuthContext } from "../../context/AuthContext"
-import { useAlert } from "../../hooks/alert.hook"
-import { useHttp } from "../../hooks/http.hook"
+import { AuthContext } from "context/AuthContext"
+import { useAlert } from "hooks/alert.hook"
+import { useHttp } from "hooks/http.hook"
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
 	paper: {
 		marginTop: "auto",
 		display: "flex",
@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-export const User = () => {
+const User = () => {
 	const auth = useContext(AuthContext)
 	const isAuth = auth.isAuth
 	const username = auth.userName
@@ -70,7 +70,7 @@ export const User = () => {
 		clearError()
 	}, [error, message, clearError])
 
-	const handleValueChange = prop => event => {
+	const handleValueChange = (prop) => (event) => {
 		setValues({ ...values, [prop]: event.target.value })
 	}
 
@@ -78,7 +78,7 @@ export const User = () => {
 		setValues({ ...values, showPassword: !values.showPassword })
 	}
 
-	const handleMouseDownPassword = event => {
+	const handleMouseDownPassword = (event) => {
 		event.preventDefault()
 	}
 
@@ -88,6 +88,7 @@ export const User = () => {
 			message(data.message)
 		} catch (error) {
 			console.log(error)
+			message(error)
 		}
 	}
 
@@ -98,18 +99,19 @@ export const User = () => {
 			auth.login(data.token, data.userId, data.userName)
 		} catch (error) {
 			console.log(error)
+			message(error)
 		}
 	}
 
-	const logoutHandler = event => {
+	const logoutHandler = (event) => {
 		event.preventDefault()
 		auth.logout()
 	}
 
 	return (
-		<React.Fragment>
+		<div className={clsx(classes.paper)}>
 			{!isAuth ? (
-				<div className={clsx(classes.paper)}>
+				<>
 					<Avatar className={clsx(classes.avatar)}>
 						<LockOutlinedIcon />
 					</Avatar>
@@ -189,9 +191,9 @@ export const User = () => {
 					>
 						Register
 					</Button>
-				</div>
+				</>
 			) : (
-				<div className={clsx(classes.paper)}>
+				<>
 					<Avatar className={clsx(classes.avatar)}>
 						{username ? username.substring(0, 1) : ""}
 					</Avatar>
@@ -209,8 +211,10 @@ export const User = () => {
 					>
 						Log Out
 					</Button>
-				</div>
+				</>
 			)}
-		</React.Fragment>
+		</div>
 	)
 }
+
+export default User

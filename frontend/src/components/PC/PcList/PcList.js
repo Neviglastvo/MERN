@@ -16,8 +16,12 @@ import ShareIcon from "@material-ui/icons/Share"
 import React from "react"
 import { NavLink } from "react-router-dom"
 import "./PcList.sass"
+import { Loader } from "components/Loader/Loader"
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
+	root: {
+		position: "relative",
+	},
 	paper: {
 		padding: theme.spacing(2),
 		textAlign: "center",
@@ -43,25 +47,19 @@ const useStyles = makeStyles(theme => ({
 		textAlign: "center",
 	},
 }))
-export const PcList = props => {
+export const PcList = (props) => {
 	const classes = useStyles()
 
-	console.log(props.pcs)
-
 	if (!props.pcs.length) {
-		return (
-			<Grid item xs={12}>
-				<Paper className={classes.paper}>No pcs</Paper>
-			</Grid>
-		)
+		return <Loader open={true} />
 	}
 
 	return (
 		<>
-			{props.pcs.map(pc => {
-				console.log("pc :", pc)
+			{props.pcs.map((pc) => {
+				// console.log("pc :", pc)
 				return (
-					<Grid item sm={12} md={6} lg={4} key={pc._id}>
+					<Grid className={classes.root} item sm={12} md={6} lg={4} key={pc._id}>
 						<Card className={`${classes.itemRoot} grade grade--${pc.grade}`}>
 							<CardMedia
 								className={classes.media}
