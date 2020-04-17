@@ -3,8 +3,8 @@ import { Redirect } from "react-router-dom"
 const storageName = "userData"
 
 export const useAuth = () => {
-	const [token, setToken] = useState(null)
 	const [ready, setReady] = useState(false)
+	const [token, setToken] = useState(null)
 	const [userId, setUserId] = useState(null)
 	const [userName, setUserName] = useState(null)
 
