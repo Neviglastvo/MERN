@@ -125,6 +125,9 @@ const VideocardsList = () => {
 			options={{
 				filtering: true,
 				actionsColumnIndex: -1,
+				fixedColumns: {
+					right: -1,
+				},
 			}}
 			editable={{
 				onRowAdd: (newData) =>

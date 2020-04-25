@@ -1,4 +1,4 @@
-import { FETCH_PCS } from "./types"
+import { FETCH_PCS } from "../types"
 
 const initialState = {
 	pcs: [],

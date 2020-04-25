@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === "production") {
 		res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
 	})
 }
-const PORT = config.get("port") || 3000
+const PORT = config.get("port") || 5000
 
 async function start() {
 	try {

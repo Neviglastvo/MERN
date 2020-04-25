@@ -14,10 +14,12 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
 import Visibility from "@material-ui/icons/Visibility"
 import VisibilityOff from "@material-ui/icons/VisibilityOff"
 import clsx from "clsx"
-import React, { useContext, useEffect, useState } from "react"
 import { AuthContext } from "context/AuthContext"
 import { useAlert } from "hooks/alert.hook"
 import { useHttp } from "hooks/http.hook"
+import React, { useContext, useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { userActions } from "redux/actions/user.actions"
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -56,14 +58,19 @@ const User = () => {
 	const isAuth = auth.isAuth
 	const username = auth.userName
 
-	const { loading, error, request, clearError } = useHttp(),
-		classes = useStyles(),
-		message = useAlert(),
-		[values, setValues] = useState({
-			email: "admin@qwe.qwe",
-			password: "313233",
-			showPassword: false,
-		})
+	const { loading, error, request, clearError } = useHttp()
+	const classes = useStyles()
+	const message = useAlert()
+
+	const loggingIn = useSelector((state) => state.auth.loggingIn)
+	const dispatch = useDispatch()
+
+	const [values, setValues] = useState({
+		email: "admin@qwe.qwe",
+		password: "313233",
+		showPassword: false,
+	})
+	const [submitted, setSubmitted] = useState(false)
 
 	useEffect(() => {
 		message(error)
@@ -85,6 +92,8 @@ const User = () => {
 	const registerHandler = async () => {
 		try {
 			const data = await request("/api/auth/register", "POST", { ...values })
+
+			setSubmitted(true)
 			message(data.message)
 		} catch (error) {
 			console.log(error)
@@ -94,9 +103,12 @@ const User = () => {
 
 	const loginHandler = async () => {
 		try {
-			const data = await request("/api/auth/login", "POST", { ...values })
-			message(data.message)
-			auth.login(data.token, data.userId, data.userName)
+			// const data = await request("/api/auth/login", "POST", { ...values })
+			// message(data.message)
+			// auth.login(data.token, data.userId, data.userName)
+			if (values) {
+				dispatch(userActions.login({ ...values }))
+			}
 		} catch (error) {
 			console.log(error)
 			message(error)
@@ -106,6 +118,7 @@ const User = () => {
 	const logoutHandler = (event) => {
 		event.preventDefault()
 		auth.logout()
+		dispatch(userActions.logout())
 	}
 
 	return (

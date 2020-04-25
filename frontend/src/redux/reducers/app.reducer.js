@@ -1,11 +1,11 @@
-import { HIDE_ALERT, HIDE_LOADER, SHOW_ALERT, SHOW_LOADER } from "./types"
+import { HIDE_ALERT, HIDE_LOADER, SHOW_ALERT, SHOW_LOADER } from "../types"
 
 const initialState = {
 	loading: false,
 	// alert: null,
 }
 
-export const appReducer = (state = initialState, action) => {
+export const app = (state = initialState, action) => {
 	switch (action.type) {
 		case SHOW_LOADER:
 			return { ...state, loading: true }

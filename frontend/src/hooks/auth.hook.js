@@ -1,8 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react"
-import { Redirect } from "react-router-dom"
-const storageName = "userData"
+import { useCallback, useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { userActions } from "redux/actions/user.actions"
+
+const storageName = "user"
 
 export const useAuth = () => {
+	const loggingIn = useSelector((state) => state.auth.loggingIn)
+	const dispatch = useDispatch()
+
 	const [ready, setReady] = useState(false)
 	const [token, setToken] = useState(null)
 	const [userId, setUserId] = useState(null)
@@ -17,6 +22,7 @@ export const useAuth = () => {
 			storageName,
 			JSON.stringify({ userId: id, token: jwtToken, userName: name }),
 		)
+		dispatch(userActions.login(jwtToken, id, name))
 	}, [])
 
 	const logout = useCallback(() => {
@@ -24,6 +30,8 @@ export const useAuth = () => {
 		setUserId(null)
 		setUserName(null)
 		localStorage.removeItem(storageName)
+
+		dispatch(userActions.logout())
 	}, [])
 
 	useEffect(() => {
@@ -32,10 +40,11 @@ export const useAuth = () => {
 
 		if (data && data.token) {
 			login(data.token, data.userId, data.userName)
+			dispatch(userActions.login(data.token, data.userId, data.userName))
 		}
 
 		setReady(true)
-	}, [login, logout])
+	}, [login])
 
 	return { login, logout, token, ready, userId, userName }
 }
