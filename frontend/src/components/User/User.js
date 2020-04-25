@@ -1,8 +1,6 @@
 import Avatar from "@material-ui/core/Avatar"
 import Button from "@material-ui/core/Button"
-import Checkbox from "@material-ui/core/Checkbox"
 import FormControl from "@material-ui/core/FormControl"
-import FormControlLabel from "@material-ui/core/FormControlLabel"
 import IconButton from "@material-ui/core/IconButton"
 import InputAdornment from "@material-ui/core/InputAdornment"
 import InputLabel from "@material-ui/core/InputLabel"
@@ -14,12 +12,11 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
 import Visibility from "@material-ui/icons/Visibility"
 import VisibilityOff from "@material-ui/icons/VisibilityOff"
 import clsx from "clsx"
-import { AuthContext } from "context/AuthContext"
 import { useAlert } from "hooks/alert.hook"
 import { useHttp } from "hooks/http.hook"
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { userActions } from "redux/actions/user.actions"
+import { userActions } from "redux/actions/index"
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -50,39 +47,41 @@ const useStyles = makeStyles((theme) => ({
 	},
 	submit: {
 		margin: theme.spacing(0, 0, 2),
+		"&:last-child": {
+			marginBottom: 0,
+		},
 	},
 }))
 
 const User = () => {
-	const auth = useContext(AuthContext)
-	const isAuth = auth.isAuth
-	const username = auth.userName
+	// const auth = useContext(AuthContext)
+	// const isAuth = auth.isAuth
+	// const username = auth.userName
+	const dispatch = useDispatch()
 
 	const { loading, error, request, clearError } = useHttp()
 	const classes = useStyles()
 	const message = useAlert()
 
 	const loggingIn = useSelector((state) => state.auth.loggingIn)
-	const dispatch = useDispatch()
+	const isAuth = useSelector((state) => state.auth.loggedIn)
+	const user = useSelector((state) => state.auth.user)
+	const username = user && user.userName
 
 	const [values, setValues] = useState({
 		email: "admin@qwe.qwe",
 		password: "313233",
-		showPassword: false,
 	})
-	const [submitted, setSubmitted] = useState(false)
 
-	useEffect(() => {
-		message(error)
-		clearError()
-	}, [error, message, clearError])
+	const [showPassword, setShowPassword] = useState(false)
+	const [submitted, setSubmitted] = useState(false)
 
 	const handleValueChange = (prop) => (event) => {
 		setValues({ ...values, [prop]: event.target.value })
 	}
 
 	const handleClickShowPassword = () => {
-		setValues({ ...values, showPassword: !values.showPassword })
+		setShowPassword(!showPassword)
 	}
 
 	const handleMouseDownPassword = (event) => {
@@ -102,22 +101,12 @@ const User = () => {
 	}
 
 	const loginHandler = async () => {
-		try {
-			// const data = await request("/api/auth/login", "POST", { ...values })
-			// message(data.message)
-			// auth.login(data.token, data.userId, data.userName)
-			if (values) {
-				dispatch(userActions.login({ ...values }))
-			}
-		} catch (error) {
-			console.log(error)
-			message(error)
+		if (values) {
+			dispatch(userActions.login({ ...values }))
 		}
 	}
 
 	const logoutHandler = (event) => {
-		event.preventDefault()
-		auth.logout()
 		dispatch(userActions.logout())
 	}
 
@@ -130,9 +119,6 @@ const User = () => {
 					</Avatar>
 					<Typography component="h1" variant="h4" className={clsx(classes.title)}>
 						Sign in
-					</Typography>
-					<Typography component="h4" className={clsx(classes.title)}>
-						zxc@qwe.qwe
 					</Typography>
 					<TextField
 						variant="outlined"
@@ -154,7 +140,7 @@ const User = () => {
 						<OutlinedInput
 							id="password"
 							className={clsx(classes.input)}
-							type={values.showPassword ? "text" : "password"}
+							type={showPassword ? "text" : "password"}
 							value={values.password}
 							label="Password"
 							onChange={handleValueChange("password")}
@@ -168,7 +154,7 @@ const User = () => {
 										onMouseDown={handleMouseDownPassword}
 										edge="end"
 									>
-										{values.showPassword ? <Visibility /> : <VisibilityOff />}
+										{showPassword ? <Visibility /> : <VisibilityOff />}
 									</IconButton>
 								</InputAdornment>
 							}
@@ -176,11 +162,11 @@ const User = () => {
 						/>
 					</FormControl>
 
-					<FormControlLabel
+					{/* <FormControlLabel
 						control={<Checkbox value="remember" color="primary" />}
 						label="Remember me"
 						className={clsx(classes.rememberMe)}
-					/>
+					/> */}
 
 					<Button
 						type="submit"
@@ -189,7 +175,7 @@ const User = () => {
 						color="primary"
 						className={clsx(classes.submit)}
 						onClick={loginHandler}
-						disabled={loading}
+						disabled={loggingIn}
 					>
 						Sign In
 					</Button>
@@ -220,9 +206,9 @@ const User = () => {
 						color="primary"
 						className={clsx(classes.submit)}
 						onClick={logoutHandler}
-						disabled={loading}
+						disabled={loggingIn}
 					>
-						Log Out
+						Sign Out
 					</Button>
 				</>
 			)}

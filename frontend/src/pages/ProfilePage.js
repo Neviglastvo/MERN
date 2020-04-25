@@ -6,8 +6,9 @@ import { Loader } from "../components/Loader/Loader"
 import { PcList } from "../components/PC/PcList/PcList"
 import { AuthContext } from "../context/AuthContext"
 import { useHttp } from "../hooks/http.hook"
+import { useSelector } from "react-redux"
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
 	},
@@ -24,12 +25,16 @@ const useStyles = makeStyles(theme => ({
 const UserPage = () => {
 	const classes = useStyles()
 
-	const auth = useContext(AuthContext)
-	const username = auth.userName
+	const auth = useSelector((state) => state.auth)
+
+	const loggingIn = auth.loggingIn
+	const isAuth = auth.loggedIn
+	const user = auth.user
+	const username = user && user.userName
+	const token = user && user.token
 
 	const [pcs, setPcs] = useState()
 	const { loading, request } = useHttp()
-	const { token } = useContext(AuthContext)
 
 	const fetchPcs = useCallback(async () => {
 		const fetched = await request(`/api/pc/user`, "GET", null, {

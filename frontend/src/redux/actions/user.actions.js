@@ -1,6 +1,7 @@
-import { useAuth } from "hooks/auth.hook"
 import { authConstants } from "redux/constants/auth.constants"
-import { useHttp } from "hooks/http.hook"
+import { authService } from "redux/services/auth.service"
+import { alertActions } from "redux/actions/index"
+import { toast } from "react-toastify"
 
 export const userActions = {
 	login,
@@ -10,32 +11,22 @@ export const userActions = {
 
 const storageName = "user"
 
-function login(jwtToken, { id, name }) {
-	// const { loading, error, request: fetch, clearError } = useHttp()
+function login({ email, password }) {
+	return (dispatch) => {
+		dispatch(request(email, password))
 
-	return async (dispatch) => {
-		dispatch(request({ jwtToken, id, name }))
-
-		// useAuth.login(jwtToken, id, name).then(
-		// 	(user) => {
-		// 		dispatch(success(user))
-		// 	},
-		// 	(error) => {
-		// 		dispatch(failure(error))
-		// 		// dispatch(alertActions.error(error))
-		// 	},
-		// )
-
-		try {
-			const user = await fetch("/api/auth/login", "POST", { jwtToken, id, name })
-			// message(data.message)
-			// auth.login(data.token, data.userId, data.userName)
-			dispatch(success(user))
-		} catch (error) {
-			console.log(error)
-			// message(error)
-			// 		// dispatch(alertActions.error(error))
-		}
+		authService.login(email, password).then(
+			(user) => {
+				dispatch(success(user))
+				dispatch(alertActions.success(`Logged in as ${email}`))
+				toast.success(`Logged in as ${email}`)
+			},
+			(error) => {
+				dispatch(failure(error))
+				dispatch(alertActions.error(error))
+				toast.error(error)
+			},
+		)
 	}
 
 	function request(user) {

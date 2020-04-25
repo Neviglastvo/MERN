@@ -7,16 +7,15 @@ import CardMedia from "@material-ui/core/CardMedia"
 import { red } from "@material-ui/core/colors"
 import Grid from "@material-ui/core/Grid"
 import IconButton from "@material-ui/core/IconButton"
-import Paper from "@material-ui/core/Paper"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import DeleteIcon from "@material-ui/icons/Delete"
 import FavoriteIcon from "@material-ui/icons/Favorite"
 import ShareIcon from "@material-ui/icons/Share"
+import { Loader } from "components/Loader/Loader"
 import React from "react"
 import { NavLink } from "react-router-dom"
 import "./PcList.sass"
-import { Loader } from "components/Loader/Loader"
 
 const useStyles = makeStyles((theme) => ({
 	root: {

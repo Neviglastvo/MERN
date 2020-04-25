@@ -12,11 +12,13 @@ import ListAltIcon from "@material-ui/icons/ListAlt"
 import PersonIcon from "@material-ui/icons/Person"
 import SettingsIcon from "@material-ui/icons/Settings"
 import clsx from "clsx"
-import React, { useContext } from "react"
 import Logo from "components/Logo/Logo"
 import Nav from "components/Nav/Nav"
 import User from "components/User/User"
 import { AuthContext } from "context/AuthContext"
+import React, { useContext } from "react"
+import { ToastContainer } from "react-toastify"
+import { useSelector } from "react-redux"
 
 const drawerWidth = 240
 const useStyles = makeStyles((theme) => ({
@@ -98,8 +100,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Layout({ children }) {
-	const auth = useContext(AuthContext)
-	const isAuth = auth.isAuth
+	// const auth = useContext(AuthContext)
+	const isAuth = useSelector((state) => state.auth.loggedIn)
 
 	const itemsAuthNot = [
 		{ href: "/", label: "Home", Icon: HomeIcon, exact: true },
@@ -149,6 +151,15 @@ export default function Layout({ children }) {
 
 	return (
 		<div className={classes.root}>
+			<ToastContainer
+				position="top-right"
+				hideProgressBar={false}
+				autoClose={3000}
+				newestOnTop={true}
+				closeOnClick={true}
+				draggable={true}
+				rtl={false}
+			/>
 			<Drawer
 				variant="permanent"
 				classes={{
@@ -164,13 +175,13 @@ export default function Layout({ children }) {
 				<Divider />
 				<User />
 				<Divider />
-				<Logo>
+				{/* <Logo>
 					<div className={open ? classes.toolbarIcon : classes.toolbarIconOpen}>
 						<IconButton onClick={handleDrawerToggle}>
 							<ChevronLeftIcon />
 						</IconButton>
 					</div>
-				</Logo>
+				</Logo> */}
 			</Drawer>
 
 			<main className={classes.content}>
