@@ -13,7 +13,7 @@ const storageName = "user"
 
 function login({ email, password }) {
 	return (dispatch) => {
-		dispatch(request(email, password))
+		dispatch(request({ email }))
 
 		authService.login(email, password).then(
 			(user) => {

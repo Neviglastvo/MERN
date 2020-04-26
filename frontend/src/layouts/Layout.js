@@ -1,10 +1,8 @@
 import Container from "@material-ui/core/Container"
 import Divider from "@material-ui/core/Divider"
 import Drawer from "@material-ui/core/Drawer"
-import IconButton from "@material-ui/core/IconButton"
 import { makeStyles } from "@material-ui/core/styles"
 import BuildIcon from "@material-ui/icons/Build"
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft"
 import ComputerIcon from "@material-ui/icons/Computer"
 import ExtensionIcon from "@material-ui/icons/Extension"
 import HomeIcon from "@material-ui/icons/Home"
@@ -12,13 +10,11 @@ import ListAltIcon from "@material-ui/icons/ListAlt"
 import PersonIcon from "@material-ui/icons/Person"
 import SettingsIcon from "@material-ui/icons/Settings"
 import clsx from "clsx"
-import Logo from "components/Logo/Logo"
 import Nav from "components/Nav/Nav"
 import User from "components/User/User"
-import { AuthContext } from "context/AuthContext"
-import React, { useContext } from "react"
-import { ToastContainer } from "react-toastify"
+import React from "react"
 import { useSelector } from "react-redux"
+import { ToastContainer } from "react-toastify"
 
 const drawerWidth = 240
 const useStyles = makeStyles((theme) => ({
@@ -106,6 +102,7 @@ export default function Layout({ children }) {
 	const itemsAuthNot = [
 		{ href: "/", label: "Home", Icon: HomeIcon, exact: true },
 		// { href: "/news", label: "News", Icon: DescriptionIcon },
+		{ href: "/build", label: "Builder", Icon: BuildIcon },
 	]
 
 	const itemsAuth = [

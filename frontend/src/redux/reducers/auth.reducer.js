@@ -2,7 +2,7 @@ import { authConstants } from "redux/constants/auth.constants"
 
 let user = JSON.parse(localStorage.getItem("user"))
 const initialState = user
-	? { loggedIn: true, loggingIn: true, user }
+	? { loggedIn: true, loggingIn: false, user }
 	: { loggedIn: false, loggingIn: false, user: null }
 
 export function auth(state = initialState, action) {
@@ -15,8 +15,8 @@ export function auth(state = initialState, action) {
 			}
 		case authConstants.LOGIN_SUCCESS:
 			return {
-				loggedIn: true,
 				loggingIn: false,
+				loggedIn: true,
 				user: action.user,
 			}
 		case authConstants.LOGIN_FAILURE:

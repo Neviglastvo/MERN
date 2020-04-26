@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { Loader } from "../components/Loader/Loader"
-import { PcCard } from "../components/PC/PcView"
-// import { AuthContext } from "../context/AuthContext"
-import { useHttp } from "../hooks/http.hook"
+import { Loader } from "components/Loader/Loader"
+import PcView from "components/PC/PcView/PcView"
+import { useHttp } from "hooks/http.hook"
 
 const PcDetailPage = () => {
 	// const { token } = useContext(AuthContext)
@@ -13,7 +12,7 @@ const PcDetailPage = () => {
 
 	const getPc = useCallback(async () => {
 		try {
-			const fetched = await request(`/api/pc/${pcName}`, "GET", null)
+			const fetched = await request(`/api/pc/${pcName}`)
 			setPc(fetched)
 		} catch (error) {
 			console.log("getPc", error)
@@ -27,7 +26,7 @@ const PcDetailPage = () => {
 	if (loading) {
 		return <Loader />
 	} else {
-		return <>{pc && <PcCard pc={pc} />}</>
+		return <>{pc && <PcView pc={pc} />}</>
 	}
 }
 

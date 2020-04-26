@@ -7,7 +7,7 @@ const toastList = new Set()
 const MAX_TOAST = 3
 
 export const useAlert = (message, messageType) => {
-	return useCallback((message) => {
+	return useCallback(() => {
 		if (message) {
 			let toastIdToDismiss = null
 			if (toastList.size === MAX_TOAST) {
@@ -32,5 +32,5 @@ export const useAlert = (message, messageType) => {
 			})
 			toastList.add(id)
 		}
-	}, [])
+	}, [message])
 }

@@ -1,6 +1,6 @@
-import { Typography } from "@material-ui/core"
+import { Typography, Grid } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
-import PcsList from "components/PC/PcsList/PcsList"
+import { PcList } from "components/PC/PcList/PcList"
 import React from "react"
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +30,9 @@ const HomePage = () => {
 			>
 				Homepage
 			</Typography>
-			<PcsList />
+			<Grid container spacing={4}>
+				<PcList />
+			</Grid>
 		</div>
 	)
 }

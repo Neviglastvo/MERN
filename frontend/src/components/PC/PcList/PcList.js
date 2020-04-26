@@ -1,21 +1,12 @@
-import Avatar from "@material-ui/core/Avatar"
-import Card from "@material-ui/core/Card"
-import CardActions from "@material-ui/core/CardActions"
-import CardContent from "@material-ui/core/CardContent"
-import CardHeader from "@material-ui/core/CardHeader"
-import CardMedia from "@material-ui/core/CardMedia"
 import { red } from "@material-ui/core/colors"
 import Grid from "@material-ui/core/Grid"
-import IconButton from "@material-ui/core/IconButton"
 import { makeStyles } from "@material-ui/core/styles"
-import Typography from "@material-ui/core/Typography"
-import DeleteIcon from "@material-ui/icons/Delete"
-import FavoriteIcon from "@material-ui/icons/Favorite"
-import ShareIcon from "@material-ui/icons/Share"
 import { Loader } from "components/Loader/Loader"
-import React from "react"
-import { NavLink } from "react-router-dom"
+import React, { useEffect } from "react"
 import "./PcList.sass"
+import PcCard from "components/PC/PcCard/PcCard"
+import { useDispatch, useSelector } from "react-redux"
+import { pcsActions } from "redux/actions/index"
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -46,73 +37,47 @@ const useStyles = makeStyles((theme) => ({
 		textAlign: "center",
 	},
 }))
+
 export const PcList = (props) => {
+	console.log("props :>> ", props)
 	const classes = useStyles()
 
-	if (!props.pcs.length) {
+	const { usersPcs, deleteAllow } = props
+
+	const dispatch = useDispatch()
+
+	const auth = useSelector((state) => state.auth)
+
+	const user = auth.user
+	const username = user && user.userName
+	const token = user && user.token
+
+	const pcs = useSelector((state) => state.pcs)
+
+	useEffect(() => {
+		if (usersPcs) {
+			dispatch(pcsActions.getAllUsers(token))
+		} else {
+			dispatch(pcsActions.getAll())
+		}
+	}, [])
+
+	if (pcs && pcs.loading) {
 		return <Loader open={true} />
 	}
 
 	return (
 		<>
-			{props.pcs.map((pc) => {
-				// console.log("pc :", pc)
-				return (
-					<Grid className={classes.root} item sm={12} md={6} lg={4} key={pc._id}>
-						<Card className={`${classes.itemRoot} grade grade--${pc.grade}`}>
-							<CardMedia
-								className={classes.media}
-								image="/img/pc/pcThumb.png"
-								title="pcThumb"
-							/>
-							<CardHeader
-								avatar={
-									<>
-										<Avatar aria-label="recipe" className={classes.userAvatar}>
-											{pc.ownerName.substring(0, 1)}
-										</Avatar>
-										<Typography component="h2" className={classes.userName}>
-											{pc.ownerName.substring(0, 10)}
-										</Typography>
-									</>
-								}
-								title={
-									<NavLink to={`/${pc.ownerName}/${pc.name}`}>
-										{pc.name} ({pc._id})
-									</NavLink>
-								}
-								subheader={new Date(pc.date).toLocaleDateString()}
-							/>
-							<CardContent>
-								<Typography variant="body2" color="textSecondary" component="p">
-									Grade: {pc.grade}
-								</Typography>
-								<Typography variant="body2" color="textSecondary" component="p">
-									{pc.descr}
-								</Typography>
-							</CardContent>
-							<CardActions disableSpacing>
-								<IconButton aria-label="add to favorites">
-									<FavoriteIcon />
-								</IconButton>
-								{pc.like}
-								<IconButton aria-label="share">
-									<ShareIcon />
-								</IconButton>
-
-								{!!props.deleteAllow && (
-									<IconButton
-										aria-label="delete"
-										onClick={() => props.deleteHandler(pc._id)}
-									>
-										<DeleteIcon />
-									</IconButton>
-								)}
-							</CardActions>
-						</Card>
-					</Grid>
-				)
-			})}
+			{pcs &&
+				pcs.items &&
+				pcs.items.map((item) => {
+					console.log("item :", item)
+					return (
+						<Grid className={classes.root} item sm={12} md={6} lg={4} key={item._id}>
+							<PcCard item={item} deleteAllow={props.deleteAllow} />
+						</Grid>
+					)
+				})}
 		</>
 	)
 }

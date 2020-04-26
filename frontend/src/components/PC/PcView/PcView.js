@@ -14,7 +14,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert"
 import ShareIcon from "@material-ui/icons/Share"
 import React from "react"
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
 	},
@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-export const PcCard = ({ pc }) => {
+const PcView = ({ pc }) => {
 	console.log("pc :", pc)
 	const classes = useStyles()
 	return (
@@ -82,3 +82,4 @@ export const PcCard = ({ pc }) => {
 		</Grid>
 	)
 }
+export default PcView

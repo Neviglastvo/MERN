@@ -1,6 +1,4 @@
 import { Loader } from "components/Loader/Loader"
-import { AuthContext } from "context/AuthContext"
-import { useAuth } from "hooks/auth.hook"
 import AdminCatalogPage from "pages/Admin/AdminCatalogPage"
 import AdminPcPage from "pages/Admin/AdminPcPage"
 import AdminMotherboardsPage from "pages/Admin/Catalog/AdminMotherboardsPage"
@@ -10,25 +8,20 @@ import HomePage from "pages/HomePage"
 import NewsPage from "pages/NewsPage"
 import PcDetailPage from "pages/PcDetailPage"
 import UserPage from "pages/ProfilePage"
-import React, { useEffect } from "react"
+import React from "react"
+import { useSelector } from "react-redux"
 import { BrowserRouter, Redirect, Switch } from "react-router-dom"
 import { AppRoute } from "routes"
-import { useSelector, useDispatch } from "react-redux"
-import { alertActions } from "redux/actions/index"
-import { history } from "helpers/history"
-import { useAlert } from "hooks/alert.hook"
 
 function App() {
 	const loading = useSelector((state) => state.app.loading)
 	const isAuth = useSelector((state) => state.auth.loggedIn)
-	const user = useSelector((state) => state.auth.user)
-	const username = user && user.userName
+	// const user = useSelector((state) => state.auth.user)
 
 	if (loading) {
 		return <Loader open={loading} />
 	}
 
-	console.log("Auth?", isAuth)
 	// const routes = AppRoute(isAuth)
 	return (
 		<BrowserRouter>

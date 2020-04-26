@@ -5,6 +5,41 @@ const auth = require("../middleware/auth.middleware")
 const router = Router()
 const colors = require("colors")
 
+router.get("/", async (req, res) => {
+	try {
+		const pcs = await Pc.find()
+		res.json(pcs)
+	} catch (error) {
+		console.log(error)
+		res
+			.status(500)
+			.json({ message: `oof, pc.routes.js (/) error: <br> ${error}` })
+	}
+})
+
+router.get("/user", auth, async (req, res) => {
+	try {
+		const pcs = await Pc.find({ ownerID: req.user.userID })
+		res.json(pcs)
+	} catch (error) {
+		res
+			.status(500)
+			.json({ message: `oof, pc.routes.js (/user) error: <br> ${error}` })
+	}
+})
+
+router.get("/:name", async (req, res) => {
+	try {
+		const pcs = await Pc.findOne(req.params)
+		res.json(pcs)
+	} catch (error) {
+		console.log(error)
+		res
+			.status(500)
+			.json({ message: `oof, pc.routes.js (/:name) error: <br> ${error}` })
+	}
+})
+
 router.post("/generate", auth, async (req, res) => {
 	try {
 		console.log("pc req.body".cyan, req.body)
@@ -69,41 +104,6 @@ router.get("/delete/:id", auth, async (req, res) => {
 		res.status(201).json({ removePc, ownerRemovePc })
 	} catch (error) {
 		res.status(500).json({ message: `pc.routes.js (/delete/:id): <br> ${error}` })
-	}
-})
-
-router.get("/user", auth, async (req, res) => {
-	try {
-		const pcs = await Pc.find({ ownerID: req.user.userID })
-		res.json(pcs)
-	} catch (error) {
-		res
-			.status(500)
-			.json({ message: `oof, pc.routes.js (/) error: <br> ${error}` })
-	}
-})
-
-router.get("/", async (req, res) => {
-	try {
-		const pcs = await Pc.find()
-		res.json(pcs)
-	} catch (error) {
-		console.log(error)
-		res
-			.status(500)
-			.json({ message: `oof, pc.routes.js (/) error: <br> ${error}` })
-	}
-})
-
-router.get("/:name", async (req, res) => {
-	try {
-		const pcs = await Pc.findOne(req.params)
-		res.json(pcs)
-	} catch (error) {
-		console.log(error)
-		res
-			.status(500)
-			.json({ message: `oof, pc.routes.js (/:name) error: <br> ${error}` })
 	}
 })
 

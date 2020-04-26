@@ -14,7 +14,7 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff"
 import clsx from "clsx"
 import { useAlert } from "hooks/alert.hook"
 import { useHttp } from "hooks/http.hook"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { userActions } from "redux/actions/index"
 

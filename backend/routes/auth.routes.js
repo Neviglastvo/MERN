@@ -86,7 +86,7 @@ router.post(
 			}
 
 			const token = jwt.sign({ userID: user.id }, config.get("jwtSecret"), {
-				expiresIn: "999999h",
+				expiresIn: "12h",
 			})
 
 			// const userName = await User.findOne({ email, userName: req.user.name })
