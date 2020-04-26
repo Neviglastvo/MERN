@@ -1,13 +1,13 @@
 import MaterialTable from "material-table"
 import React, { useCallback, useContext, useEffect, useState } from "react"
-import { AuthContext } from "../../../context/AuthContext"
+// import { AuthContext } from "../../../context/AuthContext"
 import { useAlert } from "../../../hooks/alert.hook"
 import { useHttp } from "../../../hooks/http.hook"
 
 const VideocardsList = () => {
 	const message = useAlert()
 
-	const { token } = useContext(AuthContext)
+	const { token } = ""
 	const { request } = useHttp()
 
 	const [videocards, setVideocards] = useState([])

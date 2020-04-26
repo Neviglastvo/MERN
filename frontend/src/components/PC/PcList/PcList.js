@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const PcList = (props) => {
-	console.log("props :>> ", props)
 	const classes = useStyles()
 
 	const { usersPcs, deleteAllow } = props
@@ -54,27 +53,38 @@ export const PcList = (props) => {
 
 	const pcs = useSelector((state) => state.pcs)
 
+	const items = usersPcs ? pcs.userItems : pcs.items
+
 	useEffect(() => {
+		if (pcs.userItems.length > 0 && pcs.items.length > 0) {
+			console.log("no need to fetch again")
+			return
+		}
+
 		if (usersPcs) {
-			dispatch(pcsActions.getAllUsers(token))
+			dispatch(pcsActions.getAllUsers())
 		} else {
 			dispatch(pcsActions.getAll())
 		}
 	}, [])
 
-	if (pcs && pcs.loading) {
-		return <Loader open={true} />
+	function handleDeletePc(pc) {
+		dispatch(pcsActions.delete(pc))
 	}
 
 	return (
 		<>
-			{pcs &&
-				pcs.items &&
-				pcs.items.map((item) => {
-					console.log("item :", item)
+			{pcs.loading && <Loader open />}
+			{pcs.error && <span className="text-danger">ERROR: {pcs.error}</span>}
+			{items &&
+				items.map((item) => {
 					return (
 						<Grid className={classes.root} item sm={12} md={6} lg={4} key={item._id}>
-							<PcCard item={item} deleteAllow={props.deleteAllow} />
+							<PcCard
+								item={item}
+								deleteAllow={deleteAllow}
+								handleDeletePc={handleDeletePc}
+							/>
 						</Grid>
 					)
 				})}

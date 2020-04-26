@@ -3,12 +3,12 @@ import Button from "@material-ui/core/Button"
 import { makeStyles } from "@material-ui/core/styles"
 import React, { useContext, useEffect, useState } from "react"
 import Builder from "../../components/Builder/Builder"
-import { AuthContext } from "../../context/AuthContext"
 import { useAlert } from "../../hooks/alert.hook"
 import { useHttp } from "../../hooks/http.hook"
 import "./BuildPage.sass"
+import { useSelector } from "react-redux"
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
 	},
@@ -44,10 +44,15 @@ const BuildPage = () => {
 	const classes = useStyles()
 	const message = useAlert()
 
-	const { request } = useHttp()
-	const { token } = useContext(AuthContext)
+	const auth = useSelector((state) => state.auth)
 
-	const createHandler = async values => {
+	const user = auth.user
+	const token = auth.user.token
+	const username = user && user.userName
+
+	const { request } = useHttp()
+
+	const createHandler = async (values) => {
 		console.log("values", values)
 		try {
 			await request(
@@ -75,9 +80,7 @@ const BuildPage = () => {
 	// 	selectedValue: checkPropTypes.string.isRequired,
 	// }
 	const [values, setValues] = useState({
-		name: Math.random()
-			.toString(36)
-			.substring(7),
+		name: Math.random().toString(36).substring(7),
 		descr: "qwe",
 		grade: getRandomInt(1, 12),
 		motherboard: "",
@@ -87,7 +90,7 @@ const BuildPage = () => {
 		psu: "",
 	})
 
-	const handleValueChange = prop => event => {
+	const handleValueChange = (prop) => (event) => {
 		setValues({ ...values, [prop]: event.target.value })
 	}
 
@@ -96,7 +99,7 @@ const BuildPage = () => {
 		id: "cpu",
 	})
 
-	const handleClickOpen = componentName => {
+	const handleClickOpen = (componentName) => {
 		setComponent({
 			id: componentName,
 		})

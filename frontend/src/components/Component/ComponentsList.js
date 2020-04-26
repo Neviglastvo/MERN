@@ -1,13 +1,12 @@
 import MaterialTable from "material-table"
 import React, { useCallback, useContext, useEffect, useState } from "react"
-import { AuthContext } from "../../context/AuthContext"
 import { useAlert } from "../../hooks/alert.hook"
 import { useHttp } from "../../hooks/http.hook"
 
 export const ComponentList = () => {
 	const message = useAlert()
 
-	const { token } = useContext(AuthContext)
+	const { token } = ""
 	const { request } = useHttp()
 
 	const [, setComponents] = useState()
@@ -42,7 +41,7 @@ export const ComponentList = () => {
 		fetchManufacturers()
 	}, [fetchComponents, fetchManufacturers])
 
-	const createHandler = async values => {
+	const createHandler = async (values) => {
 		console.log("values", values)
 		try {
 			await request(
@@ -59,7 +58,7 @@ export const ComponentList = () => {
 		}
 	}
 
-	const updateHandler = async values => {
+	const updateHandler = async (values) => {
 		try {
 			await request(
 				"/api/components/update",
@@ -77,7 +76,7 @@ export const ComponentList = () => {
 		}
 	}
 
-	const deleteHandler = async id => {
+	const deleteHandler = async (id) => {
 		try {
 			await request(`/api/components/delete/${id}`, "GET", null, {
 				Authorization: `Bearer ${token}`,
@@ -164,7 +163,7 @@ export const ComponentList = () => {
 						page: 0, // current page number
 						totalCount: fetched.length, // total row number
 					})
-					reject(e => {
+					reject((e) => {
 						console.log("error", e)
 					})
 				})
@@ -177,18 +176,18 @@ export const ComponentList = () => {
 				},
 			}}
 			editable={{
-				onRowAdd: newData =>
-					new Promise(resolve => {
+				onRowAdd: (newData) =>
+					new Promise((resolve) => {
 						resolve()
 						createHandler(newData)
 					}),
 				onRowUpdate: (newData, oldData) =>
-					new Promise(resolve => {
+					new Promise((resolve) => {
 						resolve()
 						updateHandler(newData)
 					}),
-				onRowDelete: oldData =>
-					new Promise(resolve => {
+				onRowDelete: (oldData) =>
+					new Promise((resolve) => {
 						resolve()
 						deleteHandler(oldData._id)
 					}),

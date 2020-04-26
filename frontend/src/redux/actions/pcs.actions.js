@@ -1,6 +1,7 @@
 import { alertActions } from "redux/actions/index"
 import { pcsService } from "redux/services/pcs.service"
 import { pcsConstants } from "redux/constants/pcs.constants"
+import { toast } from "react-toastify"
 
 export const pcsActions = {
 	create,
@@ -21,34 +22,34 @@ function getAll() {
 	}
 
 	function request() {
-		return { type: pcsConstants.GETALL_REQUEST }
+		return { type: pcsConstants.GET_ALL_REQUEST }
 	}
 	function success(pcs) {
-		return { type: pcsConstants.GETALL_SUCCESS, pcs }
+		return { type: pcsConstants.GET_ALL_SUCCESS, pcs }
 	}
 	function failure(error) {
-		return { type: pcsConstants.GETALL_FAILURE, error }
+		return { type: pcsConstants.GET_ALL_FAILURE, error }
 	}
 }
 
-function getAllUsers(token) {
+function getAllUsers() {
 	return (dispatch) => {
 		dispatch(request())
 
-		pcsService.getAllUsers(token).then(
+		pcsService.getAllUsers().then(
 			(pcs) => dispatch(success(pcs)),
 			(error) => dispatch(failure(error)),
 		)
 	}
 
 	function request() {
-		return { type: pcsConstants.GETALL_REQUEST }
+		return { type: pcsConstants.GET_USERS_REQUEST }
 	}
 	function success(pcs) {
-		return { type: pcsConstants.GETALL_SUCCESS, pcs }
+		return { type: pcsConstants.GET_USERS_SUCCESS, pcs }
 	}
 	function failure(error) {
-		return { type: pcsConstants.GETALL_FAILURE, error }
+		return { type: pcsConstants.GET_USERS_FAILURE, error }
 	}
 }
 
@@ -58,25 +59,26 @@ function create(pc) {
 
 		pcsService.create(pc).then(
 			(pc) => {
-				dispatch(success())
-				// history.push("/login")
-				dispatch(alertActions.success("Registration successful"))
+				dispatch(success(pc))
+				dispatch(alertActions.success("PC created"))
+				toast.success(`PC with name ${pc.pc.name} created`)
 			},
 			(error) => {
 				dispatch(failure(error))
 				dispatch(alertActions.error(error))
+				toast.error(error)
 			},
 		)
 	}
 
 	function request(pc) {
-		return { type: pcsConstants.REGISTER_REQUEST, pc }
+		return { type: pcsConstants.CREATE_REQUEST, pc }
 	}
 	function success(pc) {
-		return { type: pcsConstants.REGISTER_SUCCESS, pc }
+		return { type: pcsConstants.CREATE_SUCCESS, pc }
 	}
 	function failure(error) {
-		return { type: pcsConstants.REGISTER_FAILURE, error }
+		return { type: pcsConstants.CREATE_FAILURE, pc, error }
 	}
 }
 
@@ -86,7 +88,7 @@ function update(pc) {
 
 		pcsService.update(pc).then(
 			(pc) => {
-				dispatch(success())
+				dispatch(success(pc))
 				// history.push("/login")
 				dispatch(alertActions.success("Registration successful"))
 			},
@@ -109,27 +111,29 @@ function update(pc) {
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript
-function _delete(id) {
+function _delete(pc) {
 	return (dispatch) => {
-		dispatch(request(id))
+		dispatch(request(pc))
 
-		pcsService.delete(id).then(
+		pcsService.delete(pc).then(
 			(pc) => {
-				dispatch(success(id))
+				dispatch(success(pc))
+				toast.success(`PC with name ${pc.pc.name} deleted`)
 			},
 			(error) => {
-				dispatch(failure(id, error))
+				dispatch(failure(pc, error))
+				toast.error(error)
 			},
 		)
 	}
 
-	function request(id) {
-		return { type: pcsConstants.DELETE_REQUEST, id }
+	function request(pc) {
+		return { type: pcsConstants.DELETE_REQUEST, pc }
 	}
-	function success(id) {
-		return { type: pcsConstants.DELETE_SUCCESS, id }
+	function success(pc) {
+		return { type: pcsConstants.DELETE_SUCCESS, pc }
 	}
-	function failure(id, error) {
-		return { type: pcsConstants.DELETE_FAILURE, id, error }
+	function failure(pc, error) {
+		return { type: pcsConstants.DELETE_FAILURE, pc, error }
 	}
 }

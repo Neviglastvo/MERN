@@ -3,9 +3,9 @@ import { makeStyles } from "@material-ui/core/styles"
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import { PcCreate } from "components/PC/PcCreate"
 import { PcList } from "components/PC/PcList/PcList"
-import { AuthContext } from "context/AuthContext"
 import { useAlert } from "hooks/alert.hook"
 import { useHttp } from "hooks/http.hook"
+import { useSelector, useDispatch } from "react-redux"
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -18,61 +18,63 @@ const AdminPcPage = () => {
 
 	const message = useAlert()
 
-	const { token } = useContext(AuthContext)
-	const { request } = useHttp()
+	const auth = useSelector((state) => state.auth)
 
-	const fetchPcs = useCallback(async () => {
-		const fetched = await request(`/api/pc`, "GET", null)
-		setPcs(fetched)
-	}, [request])
+	const user = auth.user
+	const token = auth.user.token
 
-	useEffect(() => {
-		fetchPcs()
-	}, [fetchPcs])
+	// const { request } = useHttp()
 
-	const [pcs, setPcs] = useState(fetchPcs)
+	// const fetchPcs = useCallback(async () => {
+	// 	const fetched = await request(`/api/pc`, "GET", null)
+	// 	setPcs(fetched)
+	// }, [request])
 
-	const deleteHandler = async (id) => {
-		try {
-			await request(`/api/pc/delete/${id}`, "GET", null, {
-				Authorization: `Bearer ${token}`,
-			})
-			fetchPcs()
-			message(`PC with id:${id} deleted`)
-		} catch (error) {
-			console.log(error)
-			message(error)
-		}
-	}
+	// useEffect(() => {
+	// 	fetchPcs()
+	// }, [fetchPcs])
 
-	const createHandler = async (values) => {
-		console.log("values", values)
-		try {
-			await request(
-				"/api/pc/generate",
-				"POST",
-				{ ...values },
-				{ Authorization: `Bearer ${token}` },
-			)
-			fetchPcs()
-			message(`PC with name: ${values.name} saved`)
-			console.log("values", values)
-		} catch (error) {
-			console.error(error)
-		}
-	}
+	// const [pcs, setPcs] = useState(fetchPcs)
+
+	// const deleteHandler = async (id) => {
+	// 	try {
+	// 		await request(`/api/pc/delete/${id}`, "GET", null, {
+	// 			Authorization: `Bearer ${token}`,
+	// 		})
+	// 		fetchPcs()
+	// 		message(`PC with id:${id} deleted`)
+	// 	} catch (error) {
+	// 		console.log(error)
+	// 		message(error)
+	// 	}
+	// }
+
+	// const createHandler = async (values) => {
+	// 	console.log("values", values)
+	// 	try {
+	// 		await request(
+	// 			"/api/pc/generate",
+	// 			"POST",
+	// 			{ ...values },
+	// 			{ Authorization: `Bearer ${token}` },
+	// 		)
+	// 		fetchPcs()
+	// 		message(`PC with name: ${values.name} saved`)
+	// 		console.log("values", values)
+	// 	} catch (error) {
+	// 		console.error(error)
+	// 	}
+	// }
 
 	return (
 		<Grid container spacing={2} className={classes.root}>
 			<Grid item xs={3}>
-				<PcCreate pcs={pcs} createHandler={createHandler} />
+				<PcCreate />
 			</Grid>
 
 			<Grid item xs={9}>
 				<Grid container spacing={2}>
-					{pcs && (
-						<PcList pcs={pcs} deleteAllow="true" deleteHandler={deleteHandler} />
-					)}
+					<PcList deleteAllow />
 				</Grid>
 			</Grid>
 		</Grid>

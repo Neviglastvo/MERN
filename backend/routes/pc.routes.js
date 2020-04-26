@@ -101,7 +101,7 @@ router.get("/delete/:id", auth, async (req, res) => {
 			{ $pull: { pcs: id } },
 		)
 
-		res.status(201).json({ removePc, ownerRemovePc })
+		res.status(201).json({ pc: removePc, status: !!ownerRemovePc.ok })
 	} catch (error) {
 		res.status(500).json({ message: `pc.routes.js (/delete/:id): <br> ${error}` })
 	}

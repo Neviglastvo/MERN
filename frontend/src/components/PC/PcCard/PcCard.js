@@ -91,10 +91,7 @@ const PcCard = (props) => {
 				</IconButton>
 
 				{!!props.deleteAllow && (
-					<IconButton
-						aria-label="delete"
-						onClick={() => props.deleteHandler(pc._id)}
-					>
+					<IconButton aria-label="delete" onClick={() => props.handleDeletePc(pc)}>
 						<DeleteIcon />
 					</IconButton>
 				)}

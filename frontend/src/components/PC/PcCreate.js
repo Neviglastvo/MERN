@@ -1,7 +1,10 @@
 import { Button, makeStyles, Paper, TextField } from "@material-ui/core"
 import React, { useState } from "react"
 
-const useStyles = makeStyles(theme => ({
+import { pcsActions } from "redux/actions/index"
+import { useDispatch } from "react-redux"
+
+const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
 	},
@@ -22,8 +25,10 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-export const PcCreate = props => {
+export const PcCreate = (props) => {
 	const classes = useStyles()
+
+	const dispatch = useDispatch()
 
 	function getRandomInt(min, max) {
 		min = Math.ceil(min)
@@ -32,16 +37,18 @@ export const PcCreate = props => {
 	}
 
 	const [values, setValues] = useState({
-		name: Math.random()
-			.toString(36)
-			.substring(7),
+		name: Math.random().toString(36).substring(7),
 		descr: "qwe",
 		grade: getRandomInt(1, 12),
 	})
 
-	const handleValueChange = prop => event => {
+	const handleValueChange = (prop) => (event) => {
 		console.log("handleValueChange", event.target.value)
 		setValues({ ...values, [prop]: event.target.value })
+	}
+
+	function handleCreatePc(pc) {
+		dispatch(pcsActions.create(pc))
 	}
 
 	return (
@@ -80,7 +87,7 @@ export const PcCreate = props => {
 				<Button
 					variant="contained"
 					color="primary"
-					onClick={() => props.createHandler(values)}
+					onClick={() => handleCreatePc(values)}
 				>
 					Save
 				</Button>

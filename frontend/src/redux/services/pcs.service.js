@@ -15,10 +15,10 @@ function getAll() {
 	return fetch(`/api/pc/`, requestOptions).then(handleResponse)
 }
 
-function getAllUsers(token) {
+function getAllUsers() {
 	const requestOptions = {
 		method: "GET",
-		headers: authHeader(token),
+		headers: authHeader(),
 	}
 
 	return fetch(`/api/pc/user`, requestOptions).then(handleResponse)
@@ -33,23 +33,25 @@ function getById(userId) {
 	return fetch(`/api/pc/user`, requestOptions).then(handleResponse)
 }
 
-function create(user) {
+function create(pc) {
 	const requestOptions = {
 		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify(user),
+		headers: authHeader(),
+		body: JSON.stringify(pc),
 	}
 
-	return fetch(`/users/create`, requestOptions).then(handleResponse)
+	return fetch(`/api/pc/generate`, requestOptions).then(handleResponse)
 }
 
-function _delete(id) {
+function _delete(pc) {
 	const requestOptions = {
-		method: "DELETE",
+		method: "GET",
 		headers: authHeader(),
 	}
 
-	return fetch(`/users/${id}`, requestOptions).then(handleResponse)
+	const pcId = pc._id
+
+	return fetch(`/api/pc/delete/${pcId}`, requestOptions).then(handleResponse)
 }
 
 function update(user) {
@@ -62,11 +64,17 @@ function update(user) {
 	return fetch(`/users/${user.id}`, requestOptions).then(handleResponse)
 }
 
-function authHeader(token) {
+function authHeader() {
 	// return authorization header with jwt token
 
-	if (token) {
-		return { Authorization: "Bearer " + token }
+	const user = JSON.parse(localStorage.getItem("user"))
+	const userToken = user.token
+
+	if (userToken) {
+		return {
+			Authorization: "Bearer " + userToken,
+			"Content-Type": "application/json",
+		}
 	} else {
 		return {}
 	}
