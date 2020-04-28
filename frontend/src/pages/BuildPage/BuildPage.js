@@ -60,20 +60,21 @@ const BuildPage = () => {
 
 	const { request } = useHttp()
 
-	const createHandler = async (values) => {
-		console.log("values", values)
-		try {
-			await request(
-				"/api/pc/generate",
-				"POST",
-				{ ...values },
-				{ Authorization: `Bearer ${token}` },
-			)
-			message(`PC with name: ${values.name} saved`)
-			console.log("values", values)
-		} catch (error) {
-			console.error(error)
-		}
+	const createHandler = async (buildedItems) => {
+		// console.log("values", values)
+		// try {
+		// 	await request(
+		// 		"/api/pc/generate",
+		// 		"POST",
+		// 		{ ...values },
+		// 		{ Authorization: `Bearer ${token}` },
+		// 	)
+		// 	message(`PC with name: ${values.name} saved`)
+		// 	console.log("values", values)
+		// } catch (error) {
+		// 	console.error(error)
+		// }
+		dispatch(builderActions.create(buildedItems))
 	}
 
 	function getRandomInt(min, max) {
@@ -182,14 +183,13 @@ const BuildPage = () => {
 				<div className="builder__item builder__item--7">CPU Cooler</div>
 				<div className="builder__item builder__item--8 builder__item--active">
 					<div className="builder__item-title">
-						{values.ram.name ? values.ram.name : "RAM"}
+						{buildedItems.components.ram ? buildedItems.components.ram.name : "RAM"}
 					</div>
 					<TextField
 						id="ram"
 						className={(classes.item, classes.itemHidden)}
 						name="ram"
 						label="RAM"
-						value={values.ram}
 						onChange={handleValueChange("ram")}
 						onClick={() => {
 							handleClickOpen("ram")
@@ -205,14 +205,13 @@ const BuildPage = () => {
 				</div>
 				<div className="builder__item builder__item--11 builder__item--active">
 					<div className="builder__item-title">
-						{values.gpu.name ? values.gpu.name : "GPU"}
+						{buildedItems.components.gpu ? buildedItems.components.gpu.name : "GPU"}
 					</div>
 					<TextField
 						id="gpu"
 						className={(classes.item, classes.itemHidden)}
 						name="gpu"
 						label="GPU"
-						value={values.gpu}
 						onChange={handleValueChange("gpu")}
 						onClick={() => {
 							handleClickOpen("gpu")
@@ -240,14 +239,14 @@ const BuildPage = () => {
 				<div className="builder__item builder__item--13">Empty</div>
 				<div className="builder__item builder__item--14 builder__item--active">
 					<div className="builder__item-title">
-						{values.psu.name ? values.psu.name : "PSU"}
+						{buildedItems.components.psu ? buildedItems.components.psu.name : "PSU"}
 					</div>
 					<TextField
 						id="psu"
 						className={(classes.item, classes.itemHidden)}
 						name="psu"
 						label="PSU"
-						value={values.psu}
+						// value={values.psu}
 						onChange={handleValueChange("psu")}
 						onClick={() => {
 							handleClickOpen("psu")
@@ -257,14 +256,14 @@ const BuildPage = () => {
 				<div className="builder__item builder__item--15">Empty</div>
 				<div className="builder__item builder__item--16 builder__item--active">
 					<div className="builder__item-title">
-						{values.cpu.name ? values.cpu.name : "CPU"}
+						{buildedItems.components.cpu ? buildedItems.components.cpu.name : "CPU"}
 					</div>
 					<TextField
 						id="cpu"
 						className={(classes.item, classes.itemHidden)}
 						name="cpu"
 						label="CPU"
-						value={values.cpu}
+						// value={values.cpu}
 						onChange={handleValueChange("cpu")}
 						onClick={() => {
 							handleClickOpen("cpu")
@@ -286,3 +285,8 @@ const BuildPage = () => {
 }
 
 export default BuildPage
+
+// for (let index = 0; index < array.length; index++) {
+// 	const element = array[index];
+
+// }

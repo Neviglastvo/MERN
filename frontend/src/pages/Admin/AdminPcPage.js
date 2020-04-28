@@ -16,55 +16,10 @@ const useStyles = makeStyles((theme) => ({
 const AdminPcPage = () => {
 	const classes = useStyles()
 
-	const message = useAlert()
-
 	const auth = useSelector((state) => state.auth)
 
 	const user = auth.user
 	const token = auth.user.token
-
-	// const { request } = useHttp()
-
-	// const fetchPcs = useCallback(async () => {
-	// 	const fetched = await request(`/api/pc`, "GET", null)
-	// 	setPcs(fetched)
-	// }, [request])
-
-	// useEffect(() => {
-	// 	fetchPcs()
-	// }, [fetchPcs])
-
-	// const [pcs, setPcs] = useState(fetchPcs)
-
-	// const deleteHandler = async (id) => {
-	// 	try {
-	// 		await request(`/api/pc/delete/${id}`, "GET", null, {
-	// 			Authorization: `Bearer ${token}`,
-	// 		})
-	// 		fetchPcs()
-	// 		message(`PC with id:${id} deleted`)
-	// 	} catch (error) {
-	// 		console.log(error)
-	// 		message(error)
-	// 	}
-	// }
-
-	// const createHandler = async (values) => {
-	// 	console.log("values", values)
-	// 	try {
-	// 		await request(
-	// 			"/api/pc/generate",
-	// 			"POST",
-	// 			{ ...values },
-	// 			{ Authorization: `Bearer ${token}` },
-	// 		)
-	// 		fetchPcs()
-	// 		message(`PC with name: ${values.name} saved`)
-	// 		console.log("values", values)
-	// 	} catch (error) {
-	// 		console.error(error)
-	// 	}
-	// }
 
 	return (
 		<Grid container spacing={2} className={classes.root}>

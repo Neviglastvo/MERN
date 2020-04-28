@@ -85,9 +85,13 @@ router.post(
 				res.status(400).json({ message: "Wrong password, try better" })
 			}
 
-			const token = jwt.sign({ userID: user.id }, config.get("jwtSecret"), {
-				expiresIn: "12h",
-			})
+			const token = jwt.sign(
+				{ userID: user.id, userName: user.name },
+				config.get("jwtSecret"),
+				{
+					expiresIn: "12h",
+				},
+			)
 
 			// const userName = await User.findOne({ email, userName: req.user.name })
 			const userName = user.name

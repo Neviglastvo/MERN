@@ -43,9 +43,9 @@ router.get("/:name", async (req, res) => {
 router.post("/generate", auth, async (req, res) => {
 	try {
 		console.log("pc req.body".cyan, req.body)
-		const { name, descr, date, grade, motherboard, cpu, ram, gpu, psu } = req.body
+		const { name, descr, date, grade, ...rest } = req.body
 
-		console.log("pc cpu".cyan, cpu)
+		// console.log("pc cpu".cyan, cpu)
 
 		const existing = await Pc.findOne({ name })
 		if (existing) {
@@ -67,7 +67,7 @@ router.post("/generate", auth, async (req, res) => {
 			date,
 			ownerID,
 			ownerName,
-			components: { motherboard, cpu, ram, gpu, psu },
+			components: { ...rest },
 		})
 
 		console.log("pc".cyan, pc)

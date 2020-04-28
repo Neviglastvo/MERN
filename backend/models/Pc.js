@@ -12,7 +12,7 @@ const schema = new Schema({
 	grade: { type: Number, default: 0 },
 	components: {
 		ref: "Component",
-		type: Array,
+		type: Object,
 	},
 })
 

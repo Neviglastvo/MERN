@@ -48,22 +48,32 @@ export function builder(state = initialState, action) {
 			if (!isComponent) {
 				return {
 					...state,
-					itemBuilded: Object.assign({ ...state.itemBuilded }, { [key]: value }),
+					itemBuilded: { ...state.itemBuilded, [key]: value },
 				}
-			} else {
+			} else if (isComponent) {
+				// The key to updating nested data is that every level of nesting must be copied and updated appropriately
+				//ty redux
+
 				return {
 					...state,
-					itemBuilded: Object.assign(
-						{ ...state.itemBuilded },
-						{ ["components"]: { [key]: value } },
-					),
+					itemBuilded: {
+						...state.itemBuilded,
+						components: {
+							...state.itemBuilded.components,
+							[key]: value,
+						},
+					},
 				}
 			}
 
 		case builderConstants.CREATE_REQUEST:
-			return { ...state, loading: true, creating: true }
+			return { ...state, loading: true }
 		case builderConstants.CREATE_SUCCESS:
-			return { ...state, loading: false, items: state.items.concat(action.pc.pc) }
+			return {
+				...state,
+				loading: false,
+				itemCreated: action.item,
+			}
 		case builderConstants.CREATE_FAILURE:
 			return { ...state, loading: false, error: action.error }
 
