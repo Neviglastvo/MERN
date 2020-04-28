@@ -7,7 +7,7 @@ export const pcsActions = {
 	create,
 	update,
 	getAll,
-	getAllUsers,
+	getByUser,
 	delete: _delete,
 }
 
@@ -32,24 +32,24 @@ function getAll() {
 	}
 }
 
-function getAllUsers() {
+function getByUser() {
 	return (dispatch) => {
 		dispatch(request())
 
-		pcsService.getAllUsers().then(
+		pcsService.getByUser().then(
 			(pcs) => dispatch(success(pcs)),
 			(error) => dispatch(failure(error)),
 		)
 	}
 
 	function request() {
-		return { type: pcsConstants.GET_USERS_REQUEST }
+		return { type: pcsConstants.GET_BY_USER_REQUEST }
 	}
 	function success(pcs) {
-		return { type: pcsConstants.GET_USERS_SUCCESS, pcs }
+		return { type: pcsConstants.GET_BY_USER_SUCCESS, pcs }
 	}
 	function failure(error) {
-		return { type: pcsConstants.GET_USERS_FAILURE, error }
+		return { type: pcsConstants.GET_BY_USER_FAILURE, error }
 	}
 }
 

@@ -1,8 +1,10 @@
+import { handleResponse, authHeader } from "./helpers.service"
+
 export const pcsService = {
 	getAll,
 	getById,
 	create,
-	getAllUsers,
+	getByUser,
 	delete: _delete,
 	update,
 }
@@ -15,7 +17,7 @@ function getAll() {
 	return fetch(`/api/pc/`, requestOptions).then(handleResponse)
 }
 
-function getAllUsers() {
+function getByUser() {
 	const requestOptions = {
 		method: "GET",
 		headers: authHeader(),
@@ -54,46 +56,12 @@ function _delete(pc) {
 	return fetch(`/api/pc/delete/${pcId}`, requestOptions).then(handleResponse)
 }
 
-function update(user) {
+function update(pc) {
 	const requestOptions = {
 		method: "PUT",
 		headers: { ...authHeader(), "Content-Type": "application/json" },
-		body: JSON.stringify(user),
+		body: JSON.stringify(pc),
 	}
 
-	return fetch(`/users/${user.id}`, requestOptions).then(handleResponse)
-}
-
-function authHeader() {
-	// return authorization header with jwt token
-
-	const user = JSON.parse(localStorage.getItem("user"))
-	const userToken = user.token
-
-	if (userToken) {
-		return {
-			Authorization: "Bearer " + userToken,
-			"Content-Type": "application/json",
-		}
-	} else {
-		return {}
-	}
-}
-
-function handleResponse(response) {
-	return response.text().then((text) => {
-		const data = text && JSON.parse(text)
-		if (!response.ok) {
-			if (response.status === 401) {
-				// auto logout if 401 response returned from api
-				// logout()
-				// location.reload(true)
-			}
-
-			const error = (data && data.message) || response.statusText
-			return Promise.reject(error)
-		}
-
-		return data
-	})
+	return fetch(`/users/${pc._id}`, requestOptions).then(handleResponse)
 }

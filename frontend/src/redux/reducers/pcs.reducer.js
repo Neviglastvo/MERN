@@ -27,18 +27,18 @@ export function pcs(state = initialState, action) {
 				error: action.error,
 			}
 
-		case pcsConstants.GET_USERS_REQUEST:
+		case pcsConstants.GET_BY_USER_REQUEST:
 			return {
 				...state,
 				loading: true,
 			}
-		case pcsConstants.GET_USERS_SUCCESS:
+		case pcsConstants.GET_BY_USER_SUCCESS:
 			return {
 				...state,
 				loading: false,
 				userItems: action.pcs,
 			}
-		case pcsConstants.GET_USERS_FAILURE:
+		case pcsConstants.GET_BY_USER_FAILURE:
 			return {
 				...state,
 				loading: false,
@@ -48,7 +48,6 @@ export function pcs(state = initialState, action) {
 		case pcsConstants.CREATE_REQUEST:
 			return { ...state, loading: true, creating: true }
 		case pcsConstants.CREATE_SUCCESS:
-			console.log("action.pc", action.pc)
 			return { ...state, loading: false, items: state.items.concat(action.pc.pc) }
 		case pcsConstants.CREATE_FAILURE:
 			return { ...state, loading: false, error: action.error }

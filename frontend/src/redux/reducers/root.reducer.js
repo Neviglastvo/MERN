@@ -1,12 +1,14 @@
 import { combineReducers } from "redux"
-import { app } from "redux/reducers/app.reducer"
-import { auth } from "redux/reducers/auth.reducer"
-import { alert } from "redux/reducers/alert.reducer"
-import { pcs } from "redux/reducers/pcs.reducer"
+import { app } from "redux/reducers/index"
+import { auth } from "redux/reducers/index"
+import { alert } from "redux/reducers/index"
+import { pcs } from "redux/reducers/index"
+import { builder } from "redux/reducers/index"
 
 export const rootReducer = combineReducers({
 	app,
 	auth,
 	alert,
 	pcs,
+	builder,
 })

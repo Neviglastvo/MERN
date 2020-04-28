@@ -2,11 +2,12 @@ import { TextField } from "@material-ui/core"
 import Button from "@material-ui/core/Button"
 import { makeStyles } from "@material-ui/core/styles"
 import React, { useContext, useEffect, useState } from "react"
-import Builder from "../../components/Builder/Builder"
+import BuilderPopup from "../../components/BuilderPopup/BuilderPopup"
 import { useAlert } from "../../hooks/alert.hook"
 import { useHttp } from "../../hooks/http.hook"
 import "./BuildPage.sass"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { builderActions } from "redux/actions/index"
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -43,12 +44,19 @@ const useStyles = makeStyles((theme) => ({
 const BuildPage = () => {
 	const classes = useStyles()
 	const message = useAlert()
+	const dispatch = useDispatch()
 
 	const auth = useSelector((state) => state.auth)
 
 	const user = auth.user
 	const token = auth.user.token
 	const username = user && user.userName
+
+	const componentsInPopup = useSelector(
+		(state) => state.builder.fetchedComponents,
+	)
+
+	const buildedItems = useSelector((state) => state.builder.itemBuilded)
 
 	const { request } = useHttp()
 
@@ -92,33 +100,51 @@ const BuildPage = () => {
 
 	const handleValueChange = (prop) => (event) => {
 		setValues({ ...values, [prop]: event.target.value })
+		dispatch(
+			builderActions.setBuildedValue({
+				["isComponent"]: false,
+				["type"]: prop,
+				["item"]: event.target.value,
+			}),
+		)
 	}
 
 	const [open, setOpen] = useState(false)
-	const [component, setComponent] = useState({
-		id: "cpu",
-	})
+	const [component, setComponent] = useState({})
 
 	const handleClickOpen = (componentName) => {
 		setComponent({
-			id: componentName,
+			componentType: componentName,
 		})
 		setOpen(true)
+		dispatch(builderActions.getComponentsByType(componentName))
 	}
 
 	const onClose = (value, componentName) => {
 		setOpen(false)
 		setValues({ ...values, [componentName]: value })
+		dispatch(
+			builderActions.setBuildedValue({
+				["isComponent"]: true,
+				["type"]: componentName,
+				["item"]: value,
+			}),
+		)
 	}
 
-	useEffect(() => {
-		console.log("useEffect open :", open)
-		console.log("useEffect component :", component)
-	}, [open, component])
+	// useEffect(() => {
+	// 	console.log("useEffect open :", open)
+	// 	console.log("useEffect components :", components)
+	// }, [open, component])
 
 	return (
 		<div className="builder">
-			<Builder id={component.id} open={open} onClose={onClose} />
+			<BuilderPopup
+				componentType={component.componentType}
+				open={open}
+				onClose={onClose}
+				components={componentsInPopup}
+			/>
 
 			<div className="builder__container">
 				<div className="builder__item builder__item--1 builder__item--active">
@@ -195,14 +221,16 @@ const BuildPage = () => {
 				</div>
 				<div className="builder__item builder__item--12 builder__item--active">
 					<div className="builder__item-title">
-						{values.motherboard.name ? values.motherboard.name : "MOTHERBOARD"}
+						{buildedItems.components.motherboard
+							? buildedItems.components.motherboard.name
+							: "MOTHERBOARD"}
 					</div>
 					<TextField
 						id="motherboard"
 						className={(classes.item, classes.itemHidden)}
 						name="motherboard"
 						label="MOTHERBOARD"
-						value={values.motherboard}
+						// value={values.motherboard}
 						onChange={handleValueChange("motherboard")}
 						onClick={() => {
 							handleClickOpen("motherboard")

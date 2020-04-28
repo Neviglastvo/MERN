@@ -15,7 +15,7 @@ router.post("/generate", auth, async (req, res) => {
 		const existing = await Component.findOne({ name: name })
 
 		if (existing) {
-			console.log("existing".red, existing)
+			// console.log("existing".red, existing)
 			return res.status(500).json({ message: `already exist` })
 		}
 
@@ -42,9 +42,9 @@ router.post("/update", auth, async (req, res) => {
 	try {
 		const data = req.params
 		const { score, _id, name, descr, date, type, manufacturer } = req.body
-		console.log("name".cyan, name)
+		// console.log("name".cyan, name)
 		const id = data.id
-		console.log("data".cyan, data)
+		// console.log("data".cyan, data)
 
 		const update = await Component.updateOne(
 			{ _id: _id },
@@ -57,7 +57,7 @@ router.post("/update", auth, async (req, res) => {
 				manufacturer: manufacturer,
 			},
 		)
-		console.log("data".green, update)
+		// console.log("data".green, update)
 
 		res.status(201).json({ update })
 	} catch (error) {
@@ -86,7 +86,7 @@ router.get("/", async (req, res) => {
 		const items = await Component.find()
 		res.json(items)
 	} catch (error) {
-		console.log(error)
+		// console.log(error)
 		res
 			.status(500)
 			.json({ message: `oof, components.routes.js (/) error: <br> ${error}` })
@@ -95,15 +95,16 @@ router.get("/", async (req, res) => {
 
 router.get("/type/:type", async (req, res) => {
 	try {
-		console.log(req.params)
-		const items = await Component.find({ type: req.params.type })
-		console.log(items)
-		res.status(201).json({ items })
+		// console.log(req.params)
+		const componentType = req.params.type
+		const items = await Component.find({ type: componentType })
+		// console.log(items)
+		res.status(201).json({ items, type: componentType })
 	} catch (error) {
-		console.log(error)
-		res
-			.status(500)
-			.json({ message: `oof, components.routes.js (/) error: <br> ${error}` })
+		// console.log(error)
+		res.status(500).json({
+			message: `oof, components.routes.js (/type/:type) error: <br> ${error}`,
+		})
 	}
 })
 
