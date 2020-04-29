@@ -5,6 +5,8 @@ const path = require("path")
 
 const app = express()
 
+const PORT = process.env.PORT || 5000
+
 app.use(express.json({ extended: true }))
 
 app.use("/api/auth", require("./routes/auth.routes"))
@@ -19,11 +21,10 @@ if (process.env.NODE_ENV === "production") {
 		res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
 	})
 }
-const PORT = config.get("port") || 5000
 
 async function start() {
 	try {
-		await mongoose.connect(config.get("db"), {
+		await mongoose.connect(process.env.MONGODB_URI || config.get("db"), {
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
 			useCreateIndex: true,
