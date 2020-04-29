@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "backend/app.js",
 	"scripts": {
-		"start": "node backend/app.js",
+		"start": "npm run production",
 		"build": "cd frontend && npm run build",
 		"install-frontend": "cd frontend && npm install",
 		"install-backend": "npm install",
