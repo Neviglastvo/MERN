@@ -27,6 +27,7 @@
 		"redux": "^4.0.5",
 		"redux-devtools-extension": "^2.13.8",
 		"redux-thunk": "^2.3.0",
+		"node-sass": "^4.13.1",
 		"reset-css": "^5.0.1",
 		"classnames": "^2.2.6",
 		"react-router-dom": "^5.1.2",
@@ -84,7 +85,6 @@
 		"eslint-plugin-react": "^7.18.3",
 		"eslint-plugin-react-hooks": "^2.3.0",
 		"material-icons": "^0.3.1",
-		"node-sass": "^4.13.1",
 		"sass-lint": "^1.13.1"
 	}
 }
