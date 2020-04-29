@@ -1,5 +1,5 @@
 import "assets/sass/app.sass"
-import "material-icons/iconfont/material-icons.scss"
+// import "material-icons/iconfont/material-icons.scss"
 // import "materialize-css"
 // import "materialize-css/sass/materialize.scss"
 import React from "react"
