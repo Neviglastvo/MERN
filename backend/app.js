@@ -5,8 +5,11 @@ const path = require("path")
 
 const app = express()
 
-const PORT = 9001
-// const PORT = process.env.PORT || config.get("port")
+// const PORT = 9001
+const PORT =
+	process.env.NODE_ENV === "production"
+		? process.env.PORT
+		: config.get("port") || 9001
 
 app.use(express.json({ extended: true }))
 
@@ -15,12 +18,16 @@ app.use("/api/pc", require("./routes/pc.routes"))
 app.use("/api/components", require("./routes/components.routes"))
 app.use("/api/manufacturers", require("./routes/manufacturers.routes"))
 
-if (process.env.NODE_ENV === "production") {
-	app.use("/", express.static(path.join(__dirname, "frontend", "build")))
+// if (process.env.NODE_ENV === "production") {
+// 	app.use("/", express.static(path.join(__dirname, "frontend", "build")))
 
-	app.get("*", (req, res) => {
-		res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
-	})
+// 	app.get("*", (req, res) => {
+// 		res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
+// 	})
+// }
+
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static("frontend/build"))
 }
 
 async function start() {
