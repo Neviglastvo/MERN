@@ -2,14 +2,20 @@ import MaterialTable from "material-table"
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import { useAlert } from "../../hooks/alert.hook"
 import { useHttp } from "../../hooks/http.hook"
+import { useSelector } from "react-redux"
 
 export const ManufacturerList = () => {
 	const message = useAlert()
 
-	const { token } = ""
+	const auth = useSelector((state) => state.auth)
+
+	const user = auth.user
+	const token = user && user.token
+	const username = user && user.userName
+
 	const { request } = useHttp()
 
-	const [, setManufacturers] = useState()
+	const [manufacturers, setManufacturers] = useState()
 
 	const fetchManufacturers = useCallback(async () => {
 		const fetched = await request(`/api/manufacturers`, "GET", null)

@@ -1,13 +1,11 @@
 import { TextField } from "@material-ui/core"
 import Button from "@material-ui/core/Button"
 import { makeStyles } from "@material-ui/core/styles"
-import React, { useContext, useEffect, useState } from "react"
-import BuilderPopup from "../../components/BuilderPopup/BuilderPopup"
-import { useAlert } from "../../hooks/alert.hook"
-import { useHttp } from "../../hooks/http.hook"
-import "./BuildPage.sass"
+import React, { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { builderActions } from "redux/actions/index"
+import BuilderPopup from "../../components/BuilderPopup/BuilderPopup"
+import "./BuildPage.sass"
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -43,13 +41,12 @@ const useStyles = makeStyles((theme) => ({
 
 const BuildPage = () => {
 	const classes = useStyles()
-	const message = useAlert()
 	const dispatch = useDispatch()
 
 	const auth = useSelector((state) => state.auth)
 
 	const user = auth.user
-	const token = auth.user.token
+	const token = user && user.token
 	const username = user && user.userName
 
 	const componentsInPopup = useSelector(
@@ -58,49 +55,10 @@ const BuildPage = () => {
 
 	const buildedItems = useSelector((state) => state.builder.itemBuilded)
 
-	const { request } = useHttp()
-
-	const createHandler = async (buildedItems) => {
-		// console.log("values", values)
-		// try {
-		// 	await request(
-		// 		"/api/pc/generate",
-		// 		"POST",
-		// 		{ ...values },
-		// 		{ Authorization: `Bearer ${token}` },
-		// 	)
-		// 	message(`PC with name: ${values.name} saved`)
-		// 	console.log("values", values)
-		// } catch (error) {
-		// 	console.error(error)
-		// }
-		dispatch(builderActions.create(buildedItems))
-	}
-
-	function getRandomInt(min, max) {
-		min = Math.ceil(min)
-		max = Math.floor(max)
-		return Math.floor(Math.random() * (max - min)) + min
-	}
-
-	// Builder.propTypes = {
-	// 	onClose: checkPropTypes.func.isRequired,
-	// 	open: checkPropTypes.bool.isRequired,
-	// 	selectedValue: checkPropTypes.string.isRequired,
-	// }
-	const [values, setValues] = useState({
-		name: Math.random().toString(36).substring(7),
-		descr: "qwe",
-		grade: getRandomInt(1, 12),
-		motherboard: "",
-		cpu: "",
-		ram: "",
-		gpu: "",
-		psu: "",
-	})
+	const [open, setOpen] = useState(false)
+	const [componentType, setComponentType] = useState({})
 
 	const handleValueChange = (prop) => (event) => {
-		setValues({ ...values, [prop]: event.target.value })
 		dispatch(
 			builderActions.setBuildedValue({
 				["isComponent"]: false,
@@ -110,11 +68,8 @@ const BuildPage = () => {
 		)
 	}
 
-	const [open, setOpen] = useState(false)
-	const [component, setComponent] = useState({})
-
 	const handleClickOpen = (componentName) => {
-		setComponent({
+		setComponentType({
 			componentType: componentName,
 		})
 		setOpen(true)
@@ -123,7 +78,6 @@ const BuildPage = () => {
 
 	const onClose = (value, componentName) => {
 		setOpen(false)
-		setValues({ ...values, [componentName]: value })
 		dispatch(
 			builderActions.setBuildedValue({
 				["isComponent"]: true,
@@ -133,15 +87,15 @@ const BuildPage = () => {
 		)
 	}
 
-	// useEffect(() => {
-	// 	console.log("useEffect open :", open)
-	// 	console.log("useEffect components :", components)
-	// }, [open, component])
+	const createHandler = async () => {
+		console.log("buildedItems", buildedItems)
+		dispatch(builderActions.create(buildedItems))
+	}
 
 	return (
 		<div className="builder">
 			<BuilderPopup
-				componentType={component.componentType}
+				componentType={componentType.componentType}
 				open={open}
 				onClose={onClose}
 				components={componentsInPopup}
@@ -154,7 +108,7 @@ const BuildPage = () => {
 						className={classes.item}
 						name="name"
 						label="TITLE"
-						value={values.name}
+						value={buildedItems.name}
 						onChange={handleValueChange("name")}
 					/>
 				</div>
@@ -164,16 +118,12 @@ const BuildPage = () => {
 						className={classes.item}
 						name="grade"
 						label="GRADE"
-						value={values.grade}
+						value={buildedItems.grade}
 						onChange={handleValueChange("grade")}
 					/>
 				</div>
 				<div className="builder__item builder__item--3 builder__item--active">
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={() => createHandler(values)}
-					>
+					<Button variant="contained" color="primary" onClick={createHandler}>
 						Save
 					</Button>
 				</div>
@@ -229,7 +179,6 @@ const BuildPage = () => {
 						className={(classes.item, classes.itemHidden)}
 						name="motherboard"
 						label="MOTHERBOARD"
-						// value={values.motherboard}
 						onChange={handleValueChange("motherboard")}
 						onClick={() => {
 							handleClickOpen("motherboard")
@@ -246,7 +195,6 @@ const BuildPage = () => {
 						className={(classes.item, classes.itemHidden)}
 						name="psu"
 						label="PSU"
-						// value={values.psu}
 						onChange={handleValueChange("psu")}
 						onClick={() => {
 							handleClickOpen("psu")
@@ -263,7 +211,6 @@ const BuildPage = () => {
 						className={(classes.item, classes.itemHidden)}
 						name="cpu"
 						label="CPU"
-						// value={values.cpu}
 						onChange={handleValueChange("cpu")}
 						onClick={() => {
 							handleClickOpen("cpu")

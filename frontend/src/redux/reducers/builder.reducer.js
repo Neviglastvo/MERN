@@ -1,12 +1,19 @@
 import { builderConstants } from "redux/constants/index"
 
+function getRandomInt(min, max) {
+	min = Math.ceil(min)
+	max = Math.floor(max)
+	return Math.floor(Math.random() * (max - min)) + min
+}
+
 const initialState = {
 	loading: false,
 	fetchedComponents: {},
 	itemBuilded: {
 		loading: false,
-		name: null,
-		grade: null,
+		name: Math.random().toString(36).substring(7),
+		descr: "some description",
+		grade: getRandomInt(1, 12),
 		components: {},
 		ableToStart: false,
 		finishedBuild: false,
@@ -69,10 +76,11 @@ export function builder(state = initialState, action) {
 		case builderConstants.CREATE_REQUEST:
 			return { ...state, loading: true }
 		case builderConstants.CREATE_SUCCESS:
+			console.log("action", action)
 			return {
 				...state,
 				loading: false,
-				itemCreated: action.item,
+				itemCreated: action.pc.pc,
 			}
 		case builderConstants.CREATE_FAILURE:
 			return { ...state, loading: false, error: action.error }

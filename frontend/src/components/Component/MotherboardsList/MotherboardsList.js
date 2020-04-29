@@ -2,11 +2,17 @@ import MaterialTable from "material-table"
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import { useAlert } from "hooks/alert.hook"
 import { useHttp } from "hooks/http.hook"
+import { useSelector } from "react-redux"
 
 const Motherboards = () => {
 	const message = useAlert()
 
-	const { token } = ""
+	const auth = useSelector((state) => state.auth)
+
+	const user = auth.user
+	const token = user && user.token
+	const username = user && user.userName
+
 	const { request } = useHttp()
 
 	const [motherboards, setMotherboards] = useState([])
@@ -117,50 +123,70 @@ const Motherboards = () => {
 					// },
 					width: 130,
 				},
-				// {
-				// 	title: "Socket",
-				// 	field: "socket",
-				// 	lookup: {
-				// 		"3647": "3647 (Intel)",
-				// 		"2066": "2066 (Intel)",
-				// 		"2011-v3": "2011-v3 (Intel)",
-				// 		"1151-V2": "1151-V2 (Intel)",
-				// 		"1151": "1151 (Intel)",
-				// 		"1150": "1150 (Intel)",
-				// 		SP3: "SP3 (AMD)",
-				// 		sTRX4: "sTRX4 (AMD)",
-				// 		sTR4: "sTR4 (AMD)",
-				// 		AM4: "AM4 (AMD)",
-				// 		"AM3+": "AM3+ (AMD)",
-				// 		"FM2+": "FM2+ (AMD)",
-				// 		"integrated Intel ": "Integrated Intel",
-				// 		"integrated AMD ": "Integrated AMD",
-				// 	},
-				// 	width: 150,
-				// },
-				// {
-				// 	title: "Form-Factor",
-				// 	field: "formFactor",
-				// 	lookup: {
-				// 		"XL-ATX": "XL-ATX",
-				// 		ATX: "ATX",
-				// 		microATX: "microATX",
-				// 		"Mini-ITX": "Mini-ITX",
-				// 		"Thin Mini-ITX": "Thin Mini-ITX",
-				// 		"Mini-STX": "Mini-STX",
-				// 	},
-				// 	width: 130,
-				// },
-				// {
-				// 	title: "Chipset",
-				// 	field: "chipset",
-				// 	lookup: {
-				// 		"AMD A320": "AMD A320",
-				// 		"AMD B450": "AMD B450",
-				// 		"AMD X570": "AMD X570",
-				// 	},
-				// 	width: 130,
-				// },
+				{
+					title: "Socket",
+					field: "socket",
+					lookup: {
+						"3647": "3647 (Intel)",
+						"2066": "2066 (Intel)",
+						"2011-v3": "2011-v3 (Intel)",
+						"1151-V2": "1151-V2 (Intel)",
+						"1151": "1151 (Intel)",
+						"1150": "1150 (Intel)",
+						SP3: "SP3 (AMD)",
+						sTRX4: "sTRX4 (AMD)",
+						sTR4: "sTR4 (AMD)",
+						AM4: "AM4 (AMD)",
+						"AM3+": "AM3+ (AMD)",
+						"FM2+": "FM2+ (AMD)",
+						"integrated Intel ": "Integrated Intel",
+						"integrated AMD ": "Integrated AMD",
+					},
+					width: 150,
+				},
+				{
+					title: "Form-Factor",
+					field: "formFactor",
+					lookup: {
+						"XL-ATX": "XL-ATX",
+						ATX: "ATX",
+						microATX: "microATX",
+						"Mini-ITX": "Mini-ITX",
+						"Thin Mini-ITX": "Thin Mini-ITX",
+						"Mini-STX": "Mini-STX",
+					},
+					width: 130,
+				},
+				{
+					title: "Chipset",
+					field: "chipset",
+					lookup: {
+						"AMD A320": "AMD A320",
+						"AMD B450": "AMD B450",
+						"AMD X570": "AMD X570",
+					},
+					width: 130,
+				},
+				{
+					title: "DIMM (RAM) slots",
+					field: "ram",
+					lookup: {
+						"1": "1",
+						"2": "2",
+						"4": "4",
+					},
+					width: 130,
+				},
+				{
+					title: "DIMM (RAM) Type",
+					field: "ram",
+					lookup: {
+						DDR3: "DDR3",
+						DDR4: "DDR4",
+						DDR5: "DDR5",
+					},
+					width: 130,
+				},
 				{
 					title: "Creation Date",
 					field: "date",
