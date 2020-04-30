@@ -33,9 +33,13 @@ const Motherboards = () => {
 	}, [request])
 
 	useEffect(() => {
-		fetchMotherboards()
 		fetchManufacturers()
+		fetchMotherboards()
 	}, [fetchMotherboards])
+
+	useEffect(() => {
+		console.log("motherboards :>> ", motherboards)
+	}, [motherboards])
 
 	const createHandler = async (values) => {
 		console.log("values", values)
@@ -46,7 +50,7 @@ const Motherboards = () => {
 				{ ...values },
 				{ Authorization: `Bearer ${token}` },
 			)
-			fetchMotherboards()
+			// fetchMotherboards()
 			message(`Component with name: ${values.name} saved`)
 		} catch (error) {
 			console.error(error)
@@ -64,7 +68,7 @@ const Motherboards = () => {
 					Authorization: `Bearer ${token}`,
 				},
 			)
-			fetchMotherboards()
+			// fetchMotherboards()
 			message(`Component with name: ${values.name} saved`)
 		} catch (error) {
 			console.error(error)
@@ -77,7 +81,7 @@ const Motherboards = () => {
 			await request(`/api/components/delete/${id}`, "GET", null, {
 				Authorization: `Bearer ${token}`,
 			})
-			fetchMotherboards()
+			// fetchMotherboards()
 			message(`Component with id:${id} deleted`)
 		} catch (error) {
 			console.log(error)
@@ -95,7 +99,12 @@ const Motherboards = () => {
 					editable: "never",
 					width: 220,
 				},
-				{ title: "Name", field: "name", width: 150 },
+				{
+					title: "Name",
+					field: "name",
+					width: 150,
+					initialEditValue: "123",
+				},
 				{
 					title: "Description",
 					field: "descr",
@@ -113,14 +122,6 @@ const Motherboards = () => {
 					title: "Manufacturer",
 					field: "manufacturer",
 					lookup: manufacturers,
-					// lookup: {
-					// 	"5e5fb66780853fb8497416a8": "AMD",
-					// 	"5e5fb944823650d0bd1b271a": "INTEL",
-					// 	"5e640376f000fc6e5cccf6df": "NVIDIA",
-					// 	"5e6406580b9653805804731a": "ASUS",
-					// 	"5e6406750b9653805804731b": "AEROCOOL",
-					// 	"5e640702b011368b8021a2ea": "KINGSTON",
-					// },
 					width: 130,
 				},
 				{
@@ -169,7 +170,7 @@ const Motherboards = () => {
 				},
 				{
 					title: "DIMM (RAM) slots",
-					field: "ram",
+					field: "ramSlots",
 					lookup: {
 						"1": "1",
 						"2": "2",
@@ -179,13 +180,50 @@ const Motherboards = () => {
 				},
 				{
 					title: "DIMM (RAM) Type",
-					field: "ram",
+					field: "ramType",
 					lookup: {
 						DDR3: "DDR3",
 						DDR4: "DDR4",
 						DDR5: "DDR5",
 					},
-					width: 130,
+					width: 150,
+				},
+				{
+					title: "M2 Slots",
+					field: "m2",
+					type: "numeric",
+					width: 150,
+				},
+				{
+					title: "SATAIII Slots",
+					field: "sata3",
+					type: "numeric",
+					width: 150,
+				},
+				{
+					title: "PCI-E X16 Slots",
+					field: "pcieX16",
+					type: "numeric",
+					width: 150,
+				},
+				{
+					title: "PCI-E X1 Slots",
+					field: "pcieX1",
+					type: "numeric",
+					width: 150,
+				},
+				{
+					title: "PCI-E GEN",
+					field: "pcieGen",
+					type: "numeric",
+					width: 150,
+				},
+				{
+					title: "LAN",
+					field: "lan",
+					type: "numeric",
+					initialEditValue: "10/100/1000*1",
+					width: 150,
 				},
 				{
 					title: "Creation Date",
@@ -214,29 +252,53 @@ const Motherboards = () => {
 				// pciExpress16
 				// pciExpress4
 			]}
-			data={motherboards}
-			options={{
-				filtering: true,
-				actionsColumnIndex: -1,
-				fixedColumns: {
-					right: -1,
-				},
-			}}
+			// data={motherboards}
+			data={motherboards.length > 0 ? motherboards : []}
+			options={
+				{
+					// filtering: true,
+					// actionsColumnIndex: -1,
+					// fixedColumns: {
+					// 	left: 1,
+					// },
+				}
+			}
 			editable={{
 				onRowAdd: (newData) =>
-					new Promise((resolve) => {
-						resolve()
+					new Promise((resolve, reject) => {
+						console.log("newData", newData)
+						const oldMotherb = motherboards
+						console.log("oldMotherb :>> ", oldMotherb)
+						const newMotherb = oldMotherb.concat(newData)
+						console.log("newMotherb :>> ", newMotherb)
+						setMotherboards(newMotherb)
 						createHandler(newData)
+						resolve()
 					}),
+
 				onRowUpdate: (newData, oldData) =>
 					new Promise((resolve) => {
-						resolve()
+						const oldMotherb = motherboards
+
+						const newMotherb = oldMotherb.map((el) =>
+							el._id === newData._id ? newData : el,
+						)
+
+						setMotherboards(newMotherb)
 						updateHandler(newData)
+						resolve()
 					}),
 				onRowDelete: (oldData) =>
 					new Promise((resolve) => {
-						resolve()
+						const oldMotherb = motherboards
+
+						const newMotherb = oldMotherb.filter((motherboard, index, arr) => {
+							// arr.splice(motherboard.oldData.tableData.id)
+							return motherboard.tableData.id !== oldData.tableData.id
+						})
+						setMotherboards(newMotherb)
 						deleteHandler(oldData._id)
+						resolve()
 					}),
 			}}
 		/>

@@ -10,7 +10,7 @@ const colors = require("colors")
 
 router.post("/generate", auth, async (req, res) => {
 	try {
-		const { name, descr, date, type, manufacturer } = req.body
+		const { name, descr, date, type, manufacturer, ...rest } = req.body
 
 		const existing = await Component.findOne({ name: name })
 
@@ -26,6 +26,7 @@ router.post("/generate", auth, async (req, res) => {
 			score: 0,
 			type,
 			manufacturer,
+			...rest,
 		})
 
 		await component.save()

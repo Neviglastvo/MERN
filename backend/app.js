@@ -1,8 +1,11 @@
 const express = require("express")
 const config = require("config")
 const mongoose = require("mongoose")
+const path = require("path")
 
 const app = express()
+
+const PORT = config.get("port") || 9000
 
 app.use(express.json({ extended: true }))
 app.use("/api/auth", require("./routes/auth.routes"))
@@ -17,7 +20,6 @@ if (process.env.NODE_ENV === "production") {
 		res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
 	})
 }
-const PORT = config.get("port") || 5000
 
 async function start() {
 	try {

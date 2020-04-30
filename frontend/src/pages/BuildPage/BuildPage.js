@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles"
 import React, { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { builderActions } from "redux/actions/index"
-import BuilderPopup from "../../components/BuilderPopup/BuilderPopup"
+import BuilderPopup from "./BuilderPopup/BuilderPopup"
 import "./BuildPage.sass"
 
 const useStyles = makeStyles((theme) => ({
