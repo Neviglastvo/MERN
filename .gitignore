@@ -4,3 +4,6 @@ package-lock.json
 npm-debug.log
 .DS_Store
 /*.env
+*.lock
+.vscode
+.yarn
