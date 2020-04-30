@@ -45,9 +45,9 @@ const BuildPage = () => {
 
 	const auth = useSelector((state) => state.auth)
 
-	const user = auth.user
-	const token = user && user.token
-	const username = user && user.userName
+	// const user = auth.user
+	// const token = user && user.token
+	// const username = user && user.userName
 
 	const componentsInPopup = useSelector(
 		(state) => state.builder.fetchedComponents,

@@ -1,12 +1,9 @@
 import { Typography } from "@material-ui/core"
 import Grid from "@material-ui/core/Grid"
 import { makeStyles } from "@material-ui/core/styles"
-import React, { useCallback, useEffect, useState } from "react"
-import { useSelector, useDispatch } from "react-redux"
-import { Loader } from "../components/Loader/Loader"
+import React from "react"
+import { useSelector } from "react-redux"
 import { PcList } from "../components/PC/PcList/PcList"
-import { useHttp } from "../hooks/http.hook"
-import { pcsActions } from "redux/actions/index"
 
 const useStyles = makeStyles((theme) => ({
 	root: {

@@ -12,6 +12,8 @@ router.post("/generate", auth, async (req, res) => {
 	try {
 		const { name, descr, date, type, manufacturer, ...rest } = req.body
 
+		console.log("{...rest} :>> ", { ...rest })
+
 		const existing = await Component.findOne({ name: name })
 
 		if (existing) {
@@ -23,11 +25,13 @@ router.post("/generate", auth, async (req, res) => {
 			name,
 			descr,
 			date,
-			score: 0,
+			score,
 			type,
 			manufacturer,
 			...rest,
 		})
+
+		console.log("component", component)
 
 		await component.save()
 

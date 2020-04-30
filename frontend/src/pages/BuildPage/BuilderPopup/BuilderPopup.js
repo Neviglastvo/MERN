@@ -1,43 +1,32 @@
 import { Avatar } from "@material-ui/core"
 import AppBar from "@material-ui/core/AppBar"
-import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import IconButton from "@material-ui/core/IconButton"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
-import Slide from "@material-ui/core/Slide"
+import { createStyles, makeStyles } from "@material-ui/core/styles"
 import Toolbar from "@material-ui/core/Toolbar"
 // import { TransitionProps } from "@material-ui/core/transitions"
 import Typography from "@material-ui/core/Typography"
 import CloseIcon from "@material-ui/icons/Close"
 import { Loader } from "components/Loader/Loader"
 import React from "react"
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
 	createStyles({
 		appBar: {
 			position: "relative",
 		},
 		title: {
-			marginLeft: theme.spacing(2),
+			// marginLeft: theme.spacing(2),
 			flex: 1,
 		},
 	}),
 )
 
-// const Transition = React.forwardRef(function Transition(
-// 	props: TransitionProps & { children?: React.ReactElement },
-// 	ref: React.Ref<unknown>,
-// ) {
-// 	return <Slide direction="up" ref={ref} {...props} />
-// })
-
 const BuilderPopup = ({ components, onClose, open, componentType }) => {
 	const classes = useStyles()
-
-	// console.log("props :>> ", props)
 
 	const handleListItemClick = (value) => {
 		onClose(value, componentType)

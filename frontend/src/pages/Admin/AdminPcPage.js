@@ -1,11 +1,9 @@
 import Grid from "@material-ui/core/Grid"
 import { makeStyles } from "@material-ui/core/styles"
-import React, { useCallback, useContext, useEffect, useState } from "react"
 import { PcCreate } from "components/PC/PcCreate"
 import { PcList } from "components/PC/PcList/PcList"
-import { useAlert } from "hooks/alert.hook"
-import { useHttp } from "hooks/http.hook"
-import { useSelector, useDispatch } from "react-redux"
+import React from "react"
+import { useSelector } from "react-redux"
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -18,8 +16,8 @@ const AdminPcPage = () => {
 
 	const auth = useSelector((state) => state.auth)
 
-	const user = auth.user
-	const token = auth.user.token
+	// const user = auth.user
+	// const token = auth.user.token
 
 	return (
 		<Grid container spacing={2} className={classes.root}>
