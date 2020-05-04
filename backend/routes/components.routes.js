@@ -4,15 +4,18 @@ const Pc = require("../models/Pc")
 const Component = require("../models/Component")
 const ComponentType = require("../models/ComponentType")
 const Manufacturer = require("../models/Manufacturer")
+const motherboard = require("../models/components/Motherboard")
 const auth = require("../middleware/auth.middleware")
 const router = Router()
 const colors = require("colors")
+const mongoose = require("mongoose")
+const extend = require("mongoose-schema-extend")
 
 router.post("/generate", auth, async (req, res) => {
 	try {
-		const { name, descr, date, type, manufacturer, ...rest } = req.body
+		console.log("req.body :>> ", req.body)
 
-		console.log("{...rest} :>> ", { ...rest })
+		const { name, descr, date, type, manufacturer, ...rest } = req.body
 
 		const existing = await Component.findOne({ name: name })
 
@@ -21,20 +24,39 @@ router.post("/generate", auth, async (req, res) => {
 			return res.status(500).json({ message: `already exist` })
 		}
 
+		// if (type === "motherboard") {
+		// 	const componentMotherboard = Component.extend({
+		// 		socket: { type: String },
+		// 		chipset: { type: String },
+		// 		formFactor: { type: String },
+		// 		slots: { type: Object },
+		// 		ramType: { type: Number },
+		// 		ramSlots: { type: Number },
+		// 		ramCapacity: { type: String },
+		// 		m2Slots: { type: Number },
+		// 		sataSlots: { type: Number },
+		// 		pciExpress16: { type: Number },
+		// 		pciExpress4: { type: Number },
+		// 	})
+
+		// 	console.log("componentMotherboard :>> ", componentMotherboard)
+
+		// 	await componentMotherboard.save()
+		// 	res.status(201).json({ componentMotherboard })
+		// } else {
+		// }
 		const component = new Component({
 			name,
 			descr,
 			date,
-			score,
+			score: 0,
 			type,
 			manufacturer,
 			...rest,
 		})
 
 		console.log("component", component)
-
 		await component.save()
-
 		res.status(201).json({ component })
 	} catch (error) {
 		res.status(500).json({

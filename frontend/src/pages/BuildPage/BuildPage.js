@@ -150,8 +150,8 @@ const BuildPage = () => {
 				<div className="builder__item builder__item--subitems builder__item--10">
 					<div className="builder__subitem">SSD</div>
 					<div className="builder__subitem">M2</div>
-					<div className="builder__subitem">Empty</div>
-					<div className="builder__subitem">Empty</div>
+					<div className="builder__subitem">HDD</div>
+					<div className="builder__subitem">+</div>
 				</div>
 				<div className="builder__item builder__item--11 builder__item--active">
 					<div className="builder__item-title">

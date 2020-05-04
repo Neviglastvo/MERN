@@ -7,8 +7,8 @@ const schema = new Schema({
 	score: { type: Number, default: 0 },
 	type: { type: String, ref: "ComponentType" },
 	// type: { type: Types.ObjectId, ref: "ComponentType" },
-	manufacturer: { type: String, ref: "Manufacturer" },
-	// manufacturer: { type: Types.ObjectId, ref: "Manufacturer" },
+	// manufacturer: { type: String, ref: "Manufacturer" },
+	manufacturer: { type: Types.ObjectId, ref: "Manufacturer" },
 })
 
 module.exports = model("Component", schema)
