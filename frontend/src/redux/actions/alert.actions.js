@@ -1,4 +1,4 @@
-import { alertConstants } from "redux/constants"
+import { alertConstants } from "redux/constants/index"
 
 export const alertActions = {
 	success,

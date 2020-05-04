@@ -1,4 +1,4 @@
-import { HIDE_LOADER, SHOW_LOADER } from "../types"
+import { appConstants } from "redux/constants/index"
 
 const initialState = {
 	loading: false,
@@ -6,9 +6,9 @@ const initialState = {
 
 export const app = (state = initialState, action) => {
 	switch (action.type) {
-		case SHOW_LOADER:
+		case appConstants.SHOW_LOADER:
 			return { ...state, loading: true }
-		case HIDE_LOADER:
+		case appConstants.HIDE_LOADER:
 			return { ...state, loading: false }
 
 		default:
