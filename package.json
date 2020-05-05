@@ -12,7 +12,7 @@
 		"install-backend": "npm install",
 		"backend": "nodemon backend/app.js",
 		"frontend": "npm run start --prefix frontend",
-		"heroku-postbuild": "cross-env NODE_ENV=production NPM_CONFIG_PRODUCTION=false npm run install-backend && npm run install-frontend && npm run build && npm run start"
+		"heroku-postbuild": "cross-env NODE_ENV=production NPM_CONFIG_PRODUCTION=false npm run install-backend && npm run install-frontend && npm run build && npm run server"
 	},
 	"author": "nevejestvo",
 	"license": "ISC",
