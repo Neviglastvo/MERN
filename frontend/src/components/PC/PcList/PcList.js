@@ -64,7 +64,7 @@ export const PcList = (props) => {
 		if (usersPcs) {
 			dispatch(pcsActions.getByUser())
 		} else {
-			dispatch(pcsActions.getAll())
+			dispatch(pcsActions.getAll(dispatch))
 		}
 	}, [])
 
